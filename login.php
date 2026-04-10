@@ -9,7 +9,7 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
 // ─── Daftar pengguna (username => [password, role, nama_lengkap]) ───
 $USERS = [
     'UPT RSBG TUBAN'   => ['password' => 'admin123',   'role' => 'admin',   'nama' => 'Administrator'],
-    'pegawai' => ['password' => 'pegawai123', 'role' => 'pegawai', 'nama' => 'Shelshi'],
+    'Pegawai' => ['password' => 'Datapegawai123', 'role' => 'pegawai', 'nama' => 'Pegawai UPT RSBG Tuban'],
 ];
 
 $error = '';
@@ -143,10 +143,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <div id="hintAdmin" class="hint-box">
-        Akses penuh termasuk <b>Import RKA</b>, kelola data master &amp; laporan.
+        Akses penuh termasuk <b></b>, kelola data master &amp; laporan.
     </div>
     <div id="hintPegawai" class="hint-box" style="display:none;">
-        Akses pengajuan usulan bulanan &amp; laporan. Import RKA tidak tersedia.
+        Akses pengajuan usulan bulanan &amp; laporan.
     </div>
 
     <?php if ($error): ?>

@@ -601,6 +601,96 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
 </div><!-- /content -->
 </main>
 
+<!-- ════ MODAL EDIT PENGAJUAN ════ -->
+<div class="mov" id="modalEditPengajuan">
+  <div class="modal xl">
+    <div class="mh">
+      <h3>✏️ Edit Pengajuan</h3>
+      <button class="mc" onclick="closeModal('modalEditPengajuan')">✕</button>
+    </div>
+    <div class="mb">
+      <!-- Identitas -->
+      <div class="sender-block">
+        <div class="sb-title">📋 Identitas Pengajuan</div>
+        <div class="fr2">
+          <div class="fg">
+            <label class="fl">Bulan *</label>
+            <select class="fc" id="eBulan">
+              <option value="1">Januari 2026</option><option value="2">Februari 2026</option>
+              <option value="3">Maret 2026</option><option value="4">April 2026</option>
+              <option value="5">Mei 2026</option><option value="6">Juni 2026</option>
+              <option value="7">Juli 2026</option><option value="8">Agustus 2026</option>
+              <option value="9">September 2026</option><option value="10">Oktober 2026</option>
+              <option value="11">November 2026</option><option value="12">Desember 2026</option>
+            </select>
+          </div>
+          <div class="fg"><label class="fl">Nomor Surat *</label><input type="text" class="fc" id="eNomorSurat" placeholder="000.1.2.3/001/107.6/2026"></div>
+        </div>
+        <div class="fr2" style="margin-bottom:8px;">
+          <div class="fg" style="margin-bottom:0;"><label class="fl">Pegawai yang Mengajukan *</label><input type="text" class="fc" id="ePihak" placeholder="Nama lengkap"></div>
+          <div class="fg" style="margin-bottom:0;"><label class="fl">Dari Seksi *</label>
+            <select class="fc" id="eSeksi">
+              <option value="">— Pilih Seksi —</option>
+              <option value="Seksi Tata Usaha">Seksi Tata Usaha</option>
+              <option value="Seksi Rehabilitasi Sosial">Seksi Rehabilitasi Sosial</option>
+              <option value="Seksi Pelayanan">Seksi Pelayanan</option>
+            </select>
+          </div>
+        </div>
+        <div class="fr2">
+          <div class="fg" style="margin-bottom:0;"><label class="fl">NIP</label><input type="text" class="fc" id="eNIP" placeholder="199712312020011001"></div>
+          <div class="fg" style="margin-bottom:0;"><label class="fl">Jabatan</label><input type="text" class="fc" id="eJabatan" placeholder="Penata Laksana Barang"></div>
+        </div>
+      </div>
+
+      <!-- Daftar Item -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-size:12px;font-weight:700;">📦 Daftar Barang</div>
+        <span id="eItemCountBadge" style="font-size:10px;font-family:var(--mono);font-weight:700;color:var(--accent);background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:3px 11px;">0 item</span>
+      </div>
+      <div id="eItemList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;"></div>
+
+      <!-- Total -->
+      <div id="eItemsTotal" class="items-total-bar" style="display:none;margin-bottom:12px;">
+        <span class="itb-label">💰 Total Nilai Pengajuan</span>
+        <span class="itb-val" id="eTotalNilai">—</span>
+      </div>
+
+      <!-- Form Tambah Item Baru -->
+      <div class="add-item-form">
+        <div class="ait">+ Tambah / Ganti Barang</div>
+        <div class="fr2">
+          <div class="fg"><label class="fl">Sub Kegiatan</label><select class="fc" id="eSubKeg" onchange="ePopulateItemSel()"><option value="">— Pilih —</option></select></div>
+          <div class="fg"><label class="fl">Nama Barang</label><select class="fc" id="eItemSel" onchange="eOnItemSelect()"><option value="">— Pilih Sub dulu —</option></select></div>
+        </div>
+        <div class="fr4">
+          <div class="fg" style="margin-bottom:0;"><label class="fl">Volume *</label><input type="number" class="fc" id="eVol" placeholder="10" min="1" oninput="eOnVolInput()"></div>
+          <div class="fg" style="margin-bottom:0;"><label class="fl">Satuan</label><input type="text" class="fc" id="eSat" placeholder="Buah / Rim"></div>
+          <div class="fg" style="margin-bottom:0;">
+            <label class="fl" style="display:flex;align-items:center;gap:6px;">
+              Harga Satuan
+              <span id="eHargaAutoBadge" class="harga-auto-badge" style="display:none;">✨ Otomatis</span>
+            </label>
+            <input type="number" class="fc" id="eHarga" placeholder="10000" min="0" oninput="eOnVolInput()">
+          </div>
+          <div class="fg" style="margin-bottom:0;"><label class="fl">Total</label><input type="text" class="fc" id="eTotal" readonly placeholder="—"></div>
+        </div>
+        <div class="fg" style="margin-top:10px;margin-bottom:0;"><label class="fl">Keterangan</label><input type="text" class="fc" id="eKet" placeholder="Spesifikasi, tujuan penggunaan, dll."></div>
+        <div style="margin-top:10px;display:flex;justify-content:flex-end;"><button class="btn btn-accent btn-sm" onclick="eAddItem()">+ Tambahkan ke Daftar</button></div>
+      </div>
+
+      <div id="eErrMsg" style="display:none;" class="alert alert-err" style="margin-top:10px;"></div>
+    </div>
+    <div class="mf" style="justify-content:space-between;align-items:center;">
+      <span style="font-size:10.5px;color:var(--muted);">💡 Perubahan akan langsung menggantikan data lama</span>
+      <div style="display:flex;gap:7px;">
+        <button class="btn btn-ghost btn-sm" onclick="closeModal('modalEditPengajuan')">✕ Batal</button>
+        <button class="btn btn-orange" onclick="saveEditPengajuan()">💾 Simpan Perubahan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ════ MODAL HAPUS RKA ════ -->
 <div class="mov" id="modalDelRka">
   <div class="modal sm">
@@ -1199,7 +1289,7 @@ function renderUsulanPage(){
 const NCOL=9;
 function mkHeaderRow(p,pi,items,subTotal,delFn){
   const tgl=new Date(p.tgl).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
-  return`<tr class="group-row-header"><td colspan="${NCOL}" style="padding:8px 14px;"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;"><span class="tag-group">#${pi+1}</span><span class="tag-pihak">👤 ${esc(p.pihak||'—')}</span>${p.seksi?`<span class="tag-seksi">🏢 ${esc(p.seksi)}</span>`:''} ${p.nip?`<span class="tag-nip">NIP: ${esc(p.nip)}</span>`:''} ${p.jabatan?`<span class="tag-jabatan">${esc(p.jabatan)}</span>`:''}<span class="tag-surat">📄 ${esc(p.nomor_surat||'—')}</span><span style="font-size:10px;color:var(--muted);">🗓 ${tgl}</span><span style="font-size:10px;color:var(--muted);">${items.length} item</span>${subTotal>0?`<span style="font-size:10.5px;font-weight:700;color:var(--green);font-family:var(--mono);">${formatRp(subTotal)}</span>`:''}</div><div style="display:flex;align-items:center;gap:5px;flex-shrink:0;"><button class="btn-nota" onclick="openExportWordSingle('${p.id}')">⬇️ Usulan Permintaan</button><button onclick="${delFn}('${p.id}')" style="padding:3px 8px;background:#fef2f2;color:var(--red);border:1px solid #fca5a5;border-radius:5px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;">🗑️ Hapus</button></div></div></td></tr>`;
+  return`<tr class="group-row-header"><td colspan="${NCOL}" style="padding:8px 14px;"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;"><span class="tag-group">#${pi+1}</span><span class="tag-pihak">👤 ${esc(p.pihak||'—')}</span>${p.seksi?`<span class="tag-seksi">🏢 ${esc(p.seksi)}</span>`:''} ${p.nip?`<span class="tag-nip">NIP: ${esc(p.nip)}</span>`:''} ${p.jabatan?`<span class="tag-jabatan">${esc(p.jabatan)}</span>`:''}<span class="tag-surat">📄 ${esc(p.nomor_surat||'—')}</span><span style="font-size:10px;color:var(--muted);">🗓 ${tgl}</span><span style="font-size:10px;color:var(--muted);">${items.length} item</span>${subTotal>0?`<span style="font-size:10.5px;font-weight:700;color:var(--green);font-family:var(--mono);">${formatRp(subTotal)}</span>`:''}</div><div style="display:flex;align-items:center;gap:5px;flex-shrink:0;"><button class="btn-nota" style="background:#fef3c7;border-color:#fcd34d;color:#92400e;" onclick="openEditPengajuan('${p.id}')">✏️ Edit</button><button class="btn-nota" onclick="openExportWordSingle('${p.id}')">⬇️ Usulan Permintaan</button><button onclick="${delFn}('${p.id}')" style="padding:3px 8px;background:#fef2f2;color:var(--red);border:1px solid #fca5a5;border-radius:5px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;">🗑️ Hapus</button></div></div></td></tr>`;
 }
 function mkItemRow(it,no){
   const harga=it.harga||0;const total=it.total||(it.volume*harga)||0;
@@ -1833,7 +1923,206 @@ async function exportLaporan(){
 
   await downloadXlsx(wb,'Laporan_Rekap_SIPUA_2026.xlsx');
 }
+// ─────────────────────────────────────────
+//  EDIT PENGAJUAN
+// ─────────────────────────────────────────
+let editPengajuanId = null;
+let editItems = [];
 
+function openEditPengajuan(id) {
+  const p = (state.pengajuan || []).find(x => x.id === id);
+  if (!p) { alert('Pengajuan tidak ditemukan.'); return; }
+  editPengajuanId = id;
+  editItems = JSON.parse(JSON.stringify(p.items || []));
+
+  // Isi identitas
+  document.getElementById('eBulan').value = p.bulan || getMonth();
+  document.getElementById('eNomorSurat').value = p.nomor_surat || '';
+  document.getElementById('ePihak').value = p.pihak || '';
+  document.getElementById('eSeksi').value = p.seksi || '';
+  document.getElementById('eNIP').value = p.nip || '';
+  document.getElementById('eJabatan').value = p.jabatan || '';
+
+  // Populate sub kegiatan
+  const bln = p.bulan || getMonth();
+  const rka = getRkaForUsulan(bln);
+  const subs = getRkaSubList(rka);
+  document.getElementById('eSubKeg').innerHTML = '<option value="">— Pilih —</option>' + subs.map(s => `<option value="${s.kode}">${s.nama}</option>`).join('');
+  document.getElementById('eItemSel').innerHTML = '<option value="">— Pilih Sub dulu —</option>';
+  document.getElementById('eHargaAutoBadge').style.display = 'none';
+  ['eVol','eSat','eHarga','eTotal','eKet'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+
+  // Reset error
+  const errEl = document.getElementById('eErrMsg');
+  if (errEl) errEl.style.display = 'none';
+
+  renderEditItems();
+  openModal('modalEditPengajuan');
+  setTimeout(() => document.getElementById('ePihak').focus(), 120);
+}
+
+function renderEditItems() {
+  const listEl = document.getElementById('eItemList');
+  const countBadge = document.getElementById('eItemCountBadge');
+  const totalBar = document.getElementById('eItemsTotal');
+  const totalVal = document.getElementById('eTotalNilai');
+
+  countBadge.textContent = editItems.length + ' item';
+
+  if (!editItems.length) {
+    listEl.innerHTML = '<div style="text-align:center;padding:16px;color:var(--muted2);font-size:12px;border:1.5px dashed var(--border);border-radius:8px;">Belum ada barang. Tambahkan di bawah.</div>';
+    if (totalBar) totalBar.style.display = 'none';
+    return;
+  }
+
+  const grandTotal = editItems.reduce((s, it) => s + (it.total || 0), 0);
+  if (totalBar) totalBar.style.display = 'flex';
+  if (totalVal) totalVal.textContent = formatRp(grandTotal);
+
+  listEl.innerHTML = editItems.map((it, i) => {
+    const harga = it.harga || 0; const total = it.total || 0;
+    return '<div style="background:var(--surface);border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px;">'
+      + '<div style="flex:1;min-width:0;">'
+      + '<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;flex-wrap:wrap;"><span style="background:var(--navy);color:#fff;font-size:9px;font-weight:800;border-radius:4px;padding:1px 7px;font-family:var(--mono);">#' + (i + 1) + '</span><span style="font-size:12.5px;font-weight:700;">' + esc(it.uraian) + '</span></div>'
+      + '<div style="font-size:10px;font-weight:600;color:var(--accent);margin-bottom:4px;">📂 ' + esc(it.nama_sub) + '</div>'
+      + '<div style="display:flex;align-items:center;gap:6px;font-size:11.5px;flex-wrap:wrap;">'
+      + '<b class="mono">' + it.volume + ' ' + (it.satuan || 'unit') + '</b>'
+      + '<span style="color:var(--muted2);">×</span>'
+      + '<span class="mono">' + (harga > 0 ? formatRp(harga) : '—') + '</span>'
+      + '<span style="color:var(--muted2);">=</span>'
+      + '<b class="mono" style="color:var(--green);font-size:13px;">' + (total > 0 ? formatRp(total) : '—') + '</b>'
+      + '</div>'
+      + (it.keterangan ? '<div style="font-size:10px;color:var(--muted);font-style:italic;margin-top:4px;">📝 ' + esc(it.keterangan) + '</div>' : '')
+      + '</div>'
+      + '<button data-eidx="' + i + '" class="rm-edit-item" style="flex-shrink:0;background:none;border:none;cursor:pointer;color:var(--muted2);font-size:16px;padding:4px 6px;border-radius:5px;line-height:1;" title="Hapus item ini">✕</button>'
+      + '</div>';
+  }).join('');
+
+  listEl.querySelectorAll('.rm-edit-item').forEach(btn => {
+    btn.onclick = function () {
+      editItems.splice(parseInt(this.getAttribute('data-eidx')), 1);
+      renderEditItems();
+    };
+    btn.onmouseover = function () { this.style.color = 'var(--red)'; this.style.background = '#fee2e2'; };
+    btn.onmouseout = function () { this.style.color = 'var(--muted2)'; this.style.background = 'none'; };
+  });
+}
+
+function ePopulateItemSel() {
+  const sub = document.getElementById('eSubKeg').value;
+  const bln = parseInt(document.getElementById('eBulan').value) || getMonth();
+  const sel = document.getElementById('eItemSel');
+  sel.innerHTML = '<option value="">— Pilih nama barang —</option>';
+  if (!sub) return;
+  const rka = getRkaForUsulan(bln);
+  // Hitung sudah usul KECUALI dari pengajuan yang sedang diedit
+  rka.filter(r => (r.kode_sub || r.nama_sub) === sub).forEach(r => {
+    const sudahLain = (state.pengajuan || []).filter(p => p.id !== editPengajuanId)
+      .flatMap(p => p.items || []).filter(it => it.item_key === r.item_key)
+      .reduce((s, it) => s + (it.volume || 0), 0);
+    const sudahEdit = editItems.filter(it => it.item_key === r.item_key).reduce((s, it) => s + (it.volume || 0), 0);
+    const sisa = r.jumlah - sudahLain - sudahEdit;
+    const icon = sisa <= 0 ? '🔴' : sisa < r.jumlah * 0.2 ? '🟡' : '🟢';
+    sel.innerHTML += `<option value="${r.item_key}">${icon} ${r.uraian} — sisa: ${sisa <= 0 ? 'Habis' : sisa + ' ' + r.satuan}</option>`;
+  });
+  document.getElementById('eHargaAutoBadge').style.display = 'none';
+  ['eVol','eSat','eHarga','eTotal','eKet'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+}
+
+function eOnItemSelect() {
+  const v = document.getElementById('eItemSel').value;
+  const autoBadge = document.getElementById('eHargaAutoBadge');
+  if (!v) { autoBadge.style.display = 'none'; return; }
+  const bln = parseInt(document.getElementById('eBulan').value) || getMonth();
+  const rka = getRkaForUsulan(bln);
+  const rkaItem = rka.find(r => r.item_key === v);
+  if (!rkaItem) return;
+  document.getElementById('eSat').value = rkaItem.satuan || '';
+  if (rkaItem.harga_satuan && rkaItem.harga_satuan > 0) {
+    document.getElementById('eHarga').value = rkaItem.harga_satuan;
+    autoBadge.style.display = 'inline-flex';
+  } else {
+    document.getElementById('eHarga').value = '';
+    autoBadge.style.display = 'none';
+  }
+  if (!document.getElementById('eVol').value) document.getElementById('eVol').value = 1;
+  eOnVolInput();
+  setTimeout(() => document.getElementById('eVol').select(), 60);
+}
+
+function eOnVolInput() {
+  const vol = parseFloat(document.getElementById('eVol').value) || 0;
+  const harga = parseFloat(document.getElementById('eHarga').value) || 0;
+  document.getElementById('eTotal').value = (vol && harga) ? formatRp(vol * harga) : '';
+}
+
+function eAddItem() {
+  const itemKey = document.getElementById('eItemSel').value;
+  const vol = parseFloat(document.getElementById('eVol').value) || 0;
+  const harga = parseFloat(document.getElementById('eHarga').value) || 0;
+  const sat = document.getElementById('eSat').value.trim();
+  const ket = document.getElementById('eKet').value.trim();
+
+  const errEl = document.getElementById('eErrMsg');
+  if (!itemKey) { errEl.innerHTML = '⚠️ Pilih nama barang.'; errEl.style.display = 'flex'; return; }
+  if (!vol || vol <= 0) { errEl.innerHTML = '⚠️ Isi volume.'; errEl.style.display = 'flex'; return; }
+  errEl.style.display = 'none';
+
+  const bln = parseInt(document.getElementById('eBulan').value) || getMonth();
+  const rka = getRkaForUsulan(bln);
+  const rkaItem = rka.find(r => r.item_key === itemKey);
+  if (!rkaItem) { errEl.innerHTML = '⚠️ Item RKA tidak ditemukan.'; errEl.style.display = 'flex'; return; }
+
+  const sudahLain = (state.pengajuan || []).filter(p => p.id !== editPengajuanId)
+    .flatMap(p => p.items || []).filter(it => it.item_key === itemKey)
+    .reduce((s, it) => s + (it.volume || 0), 0);
+  const sudahEdit = editItems.filter(it => it.item_key === itemKey).reduce((s, it) => s + (it.volume || 0), 0);
+  const sisaEfektif = rkaItem.jumlah - sudahLain - sudahEdit;
+
+  if (sisaEfektif <= 0) { errEl.innerHTML = '🚫 Stok item ini sudah habis.'; errEl.style.display = 'flex'; return; }
+  if (vol > sisaEfektif) { errEl.innerHTML = `⚠️ Volume melebihi sisa stok (${sisaEfektif} ${rkaItem.satuan || ''}).`; errEl.style.display = 'flex'; document.getElementById('eVol').value = sisaEfektif; eOnVolInput(); return; }
+
+  editItems.push({
+    id: uid(), kode_sub: rkaItem.kode_sub || rkaItem.nama_sub, nama_sub: rkaItem.nama_sub,
+    item_key: itemKey, uraian: rkaItem.uraian, volume: vol, satuan: sat, harga, total: vol * harga, keterangan: ket
+  });
+  renderEditItems();
+  ['eItemSel','eVol','eSat','eHarga','eTotal','eKet'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.getElementById('eHargaAutoBadge').style.display = 'none';
+  document.getElementById('eSubKeg').value = '';
+  document.getElementById('eItemSel').innerHTML = '<option value="">— Pilih Sub dulu —</option>';
+}
+
+function saveEditPengajuan() {
+  const pihak = document.getElementById('ePihak').value.trim();
+  const seksi = document.getElementById('eSeksi').value.trim();
+  const nomor_surat = document.getElementById('eNomorSurat').value.trim();
+  const bulan = parseInt(document.getElementById('eBulan').value);
+  const nip = document.getElementById('eNIP').value.trim();
+  const jabatan = document.getElementById('eJabatan').value.trim();
+
+  const errEl = document.getElementById('eErrMsg');
+  if (!pihak) { errEl.innerHTML = '⚠️ Isi Pihak yang Mengajukan.'; errEl.style.display = 'flex'; document.getElementById('ePihak').focus(); return; }
+  if (!seksi) { errEl.innerHTML = '⚠️ Pilih Dari Seksi.'; errEl.style.display = 'flex'; document.getElementById('eSeksi').focus(); return; }
+  if (!nomor_surat) { errEl.innerHTML = '⚠️ Isi Nomor Surat.'; errEl.style.display = 'flex'; document.getElementById('eNomorSurat').focus(); return; }
+  if (!editItems.length) { errEl.innerHTML = '⚠️ Minimal 1 barang harus ada.'; errEl.style.display = 'flex'; return; }
+  errEl.style.display = 'none';
+
+  const idx = (state.pengajuan || []).findIndex(p => p.id === editPengajuanId);
+  if (idx === -1) { alert('Pengajuan tidak ditemukan.'); return; }
+
+  state.pengajuan[idx] = {
+    ...state.pengajuan[idx],
+    bulan, nomor_surat, pihak, seksi, nip, jabatan,
+    items: JSON.parse(JSON.stringify(editItems))
+  };
+  save();
+  closeModal('modalEditPengajuan');
+  renderUsulanPage();
+  renderRkaTable();
+  renderDashboard();
+  if (riwayatSelectedMonth) renderRiwayat();
+}
 // ─────────────────────────────────────────
 //  INIT
 // ─────────────────────────────────────────
