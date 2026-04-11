@@ -286,11 +286,11 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
   <button class="nav-item" onclick="goPage('dashboard')"><span class="nav-icon">🏠</span> Dashboard</button>
   <?php if ($isAdmin): ?>
   <button class="nav-item" onclick="goPage('import-rka')">
-    <span class="nav-icon">📤</span> Import RKA
+    <span class="nav-icon">📤</span> Import DPA
     <span class="nav-badge-rka" id="sbBadgeRka" style="display:none">!</span>
   </button>
   <?php endif; ?>
-  <button class="nav-item" onclick="goPage('rka')"><span class="nav-icon">📑</span> Data RKA</button>
+  <button class="nav-item" onclick="goPage('rka')"><span class="nav-icon">📑</span> Data DPA</button>
   <button class="nav-item" onclick="goPage('subkegiatan')"><span class="nav-icon">🏛️</span> Sub Kegiatan</button>
   <button class="nav-item" onclick="goPage('usulan')"><span class="nav-icon">✅</span> Usulan Bulanan</button>
   <button class="nav-item" onclick="goPage('riwayat')"><span class="nav-icon">🗂️</span> Riwayat per Bulan</button>
@@ -334,19 +334,19 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
 <div class="page" id="page-import-rka">
   <?php if ($isAdmin): ?>
   <div class="ph">
-    <div><h2>Import Data RKA</h2><p>Upload file Excel RKA per bulan — data tiap bulan tersimpan secara terpisah</p></div>
+    <div><h2>Import Data DPA</h2><p>Upload file Excel DPA per bulan — data tiap bulan tersimpan secara terpisah</p></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <button class="btn btn-accent btn-sm" onclick="openImportWizard(null)">+ Import RKA Baru</button>
+      <button class="btn btn-accent btn-sm" onclick="openImportWizard(null)">+ Import DPA Baru</button>
     </div>
   </div>
   <div class="sg sg4" id="importRkaStats"></div>
   <div class="card">
-    <div class="card-head"><h3>📅 Data RKA Tersimpan per Bulan</h3><span class="sub" id="rkaStorageSub">—</span></div>
-    <div class="card-body" id="rkaMonthGrid"><div class="empty"><div class="ei">📭</div><p>Belum ada data RKA.</p></div></div>
+    <div class="card-head"><h3>📅 Data DPA Tersimpan per Bulan</h3><span class="sub" id="rkaStorageSub">—</span></div>
+    <div class="card-body" id="rkaMonthGrid"><div class="empty"><div class="ei">📭</div><p>Belum ada data DPA.</p></div></div>
   </div>
   <div class="import-wizard" id="importWizard" style="display:none;">
     <div class="iw-head">
-      <span id="iwTitle">📤 Import RKA untuk Bulan</span>
+      <span id="iwTitle">📤 Import DPA untuk Bulan</span>
       <button class="btn btn-ghost btn-xs" onclick="closeImportWizard()">✕ Tutup</button>
     </div>
     <div class="step-bar" id="stepBar">
@@ -368,7 +368,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
         </select>
       </div>
       <div id="iwExistingWarn" style="display:none;" class="alert alert-warn"></div>
-      <div class="tmpl-hint">💡 <span>Data RKA per bulan bisa berbeda-beda. Setiap bulan menyimpan data RKA secara terpisah.</span></div>
+      <div class="tmpl-hint">💡 <span>Data DPA per bulan bisa berbeda-beda. Setiap bulan menyimpan data DPA secara terpisah.</span></div>
       <div style="display:flex;justify-content:flex-end;margin-top:8px;">
         <button class="btn btn-accent" onclick="iwNext1()">Lanjut: Upload File →</button>
       </div>
@@ -426,7 +426,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
   <div class="access-denied">
     <div class="ad-icon">🔒</div>
     <h2>Akses Terbatas</h2>
-    <p>Halaman <b>Import RKA</b> hanya dapat diakses oleh <b>Admin</b>.<br>Hubungi admin untuk melakukan import data RKA.</p>
+    <p>Halaman <b>Import DPA</b> hanya dapat diakses oleh <b>Admin</b>
     <button class="btn btn-accent" onclick="goPage('dashboard')">← Kembali ke Dashboard</button>
   </div>
   <?php endif; ?>
@@ -451,7 +451,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
     </div>
   </div>
   <div class="card">
-    <div class="card-head"><h3>🏛️ Status Item RKA (Bulan Aktif)</h3><span class="sub" id="dashRkaBulanSub">—</span></div>
+    <div class="card-head"><h3>🏛️ Status Item DPA (Bulan Aktif)</h3><span class="sub" id="dashRkaBulanSub">—</span></div>
     <div class="tw"><table>
       <thead><tr><th>Sub Kegiatan</th><th>Total Item</th><th>Sudah Diusulkan</th><th>Belum Diusulkan</th><th>Progress</th></tr></thead>
       <tbody id="dashSubTbody"></tbody>
@@ -462,22 +462,22 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
 <!-- ════ DATA RKA ════ -->
 <div class="page" id="page-rka">
   <div class="ph">
-    <div><h2>Data RKA</h2><p id="rkaSubTitle">Master item RKA TA 2026</p></div>
+    <div><h2>Data DPA</h2><p id="rkaSubTitle">Master item DPA TA 2026</p></div>
     <div style="display:flex;gap:8px;">
       <?php if ($isAdmin): ?>
-      <button class="btn btn-accent btn-sm" onclick="goPage('import-rka')">📤 Import / Kelola RKA</button>
+      <button class="btn btn-accent btn-sm" onclick="goPage('import-rka')">📤 Import DPA</button>
       <?php endif; ?>
-      <button class="btn btn-green btn-sm" onclick="exportRkaExcel()">⬇️ Export Excel</button>
+      <button class="btn btn-green btn-sm" onclick="exportRkaExcel()">⬇️ Rekapitulasi DPA</button>
     </div>
   </div>
   <div id="rkaNoBanner" style="display:none;"></div>
   <div class="card" style="margin-bottom:12px;">
-    <div class="card-head"><h3>📅 Filter Bulan RKA</h3></div>
+    <div class="card-head"><h3>📅 Filter Bulan DPA</h3></div>
     <div class="card-body" style="padding:10px 14px;">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <label style="font-size:12px;font-weight:600;">Tampilkan RKA bulan:</label>
+        <label style="font-size:12px;font-weight:600;">Tampilkan DPA bulan:</label>
         <select class="sel" id="rkaBulanFilter" onchange="renderRkaTable()">
-          <option value="all">Semua Bulan (gabungan)</option>
+          <option value="all">Semua Bulan</option>
           <option value="1">Januari 2026</option><option value="2">Februari 2026</option>
           <option value="3">Maret 2026</option><option value="4">April 2026</option>
           <option value="5">Mei 2026</option><option value="6">Juni 2026</option>
@@ -495,7 +495,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
     <div class="sc sc-green"><span class="ico">✅</span><div class="lbl">Item Diusulkan</div><div class="val" id="rkaUsulCount">—</div><div class="sub">dari total item</div></div>
   </div>
   <div class="card">
-    <div class="card-head"><h3>📑 Daftar Item RKA</h3><span class="sub" id="rkaCardSub">TA 2026</span></div>
+    <div class="card-head"><h3>📑 Daftar Item DPA</h3><span class="sub" id="rkaCardSub">TA 2026</span></div>
     <div class="filter-bar">
       <div class="sw"><span class="si">🔍</span><input type="text" class="si-inp" id="filterRka" placeholder="Cari sub kegiatan atau uraian…" oninput="renderRkaTable()"></div>
       <select class="sel" id="filterRkaSub" onchange="renderRkaTable()"><option value="">Semua Sub Kegiatan</option></select>
@@ -515,26 +515,26 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
 <!-- ════ SUB KEGIATAN ════ -->
 <div class="page" id="page-subkegiatan">
   <div class="ph">
-    <div><h2>Sub Kegiatan</h2><p id="skPageSub">Daftar sub kegiatan beserta barang dari data RKA</p></div>
+    <div><h2>Sub Kegiatan</h2><p id="skPageSub">Daftar sub kegiatan beserta barang dari data DPA</p></div>
     <button class="btn btn-ghost btn-sm" onclick="renderSubKegiatanPage()">↻ Refresh</button>
   </div>
   <div id="skNoRka" style="display:none;">
-    <div class="alert alert-warn">⚠️ <span>Data RKA belum diimport. <?= $isAdmin ? '<b onclick="goPage(\'import-rka\')" style="cursor:pointer;text-decoration:underline;">Klik di sini untuk Import RKA</b>' : 'Hubungi Admin untuk import data RKA.' ?> terlebih dahulu.</span></div>
+    <div class="alert alert-warn">⚠️ <span>Data DPA belum diimport. <?= $isAdmin ? '<b onclick="goPage(\'import-rka\')" style="cursor:pointer;text-decoration:underline;">Klik di sini untuk Import DPA</b>' : 'Hubungi Admin untuk import data DPA.' ?> terlebih dahulu.</span></div>
   </div>
   <div class="sk-search-box">
     <span class="sk-si">🔍</span>
-    <input type="text" id="skSearch" placeholder="Cari nama barang… hasil akan menampilkan sub kegiatan yang sesuai" oninput="onSkSearch()">
+    <input type="text" id="skSearch" placeholder="Masukkan nama barang, kemudian sistem akan menampilkan subkegiatan yang sesuai." oninput="onSkSearch()">
     <button class="sk-clear" id="skClearBtn" onclick="clearSkSearch()">✕</button>
   </div>
   <div id="skSearchResult">
-    <div class="empty" style="padding:32px 16px;"><div class="ei">🔍</div><p style="font-size:13px;">Ketik nama barang di kolom pencarian di atas</p></div>
+    <div class="empty" style="padding:32px 16px;"><div class="ei">🔍</div><p style="font-size:13px;">Masukkan nama barang di kolom pencarian di atas</p></div>
   </div>
 </div>
 
 <!-- ════ USULAN BULANAN ════ -->
 <div class="page" id="page-usulan">
   <div class="ph">
-    <div><h2>Usulan Bulanan</h2><p id="usulanSubtitle">Input usulan permintaan barang/jasa per bulan</p></div>
+    <div><h2>Usulan Bulanan</h2><p id="usulanSubtitle">Input usulan permintaan barang per bulan</p></div>
     <button class="btn btn-accent" onclick="openModalUsulan()">+ Buat Pengajuan Baru</button>
   </div>
   <div id="usulanNoRka" style="display:none;"></div>
@@ -569,7 +569,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
 <div class="page" id="page-riwayat">
   <div class="ph">
     <div><h2>Riwayat per Bulan</h2><p>Data pengajuan tersimpan per bulan</p></div>
-    <button class="btn btn-ghost btn-sm" onclick="exportAllExcel()">⬇️ Export Semua</button>
+    <button class="btn btn-ghost btn-sm" onclick="exportAllExcel()">⬇️ Export All</button>
   </div>
   <div class="month-tabs" id="riwayatMonthTabs"></div>
   <div id="riwayatContent"><div class="empty"><div class="ei">📅</div><p>Pilih bulan untuk melihat riwayat.</p></div></div>
@@ -580,8 +580,8 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
   <div class="ph">
     <div><h2>Laporan Rekapitulasi</h2><p>Rekap usulan seluruh bulan TA 2026</p></div>
     <div style="display:flex;gap:7px;">
-      <button class="btn btn-orange" onclick="window.print()">🖨️ Cetak</button>
-      <button class="btn btn-green btn-sm" onclick="exportLaporan()">⬇️ Export Excel</button>
+      <button class="btn btn-orange" onclick="window.print()">🖨️ Cetak Laporan </button>
+      <button class="btn btn-green btn-sm" onclick="exportLaporan()">⬇️ Rekapitulasi Usulan Barang</button>
     </div>
   </div>
   <div class="sg sg3" id="lapStats"></div>
@@ -590,9 +590,9 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
     <div class="card-body"><canvas id="lapBar" height="180"></canvas></div>
   </div>
   <div class="card">
-    <div class="card-head"><h3>📋 Rekap per Item RKA</h3></div>
+    <div class="card-head"><h3>📋 Rekap per Item DPA</h3></div>
     <div class="tw"><table>
-      <thead><tr><th>No</th><th>Bulan RKA</th><th>Sub Kegiatan</th><th>Uraian</th><th style="text-align:right;">Jumlah RKA</th><th>Satuan</th><th style="text-align:right;">Total Diusulkan</th><th style="text-align:right;">Sisa</th><th>%</th></tr></thead>
+      <thead><tr><th>No</th><th>Bulan DPA</th><th>Sub Kegiatan</th><th>Uraian</th><th style="text-align:right;">Jumlah DPA</th><th>Satuan</th><th style="text-align:right;">Total Diusulkan</th><th style="text-align:right;">Sisa</th><th>%</th></tr></thead>
       <tbody id="lapTbody"></tbody>
     </table></div>
   </div>
@@ -694,8 +694,8 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
 <!-- ════ MODAL HAPUS RKA ════ -->
 <div class="mov" id="modalDelRka">
   <div class="modal sm">
-    <div class="mh"><h3>🗑️ Hapus Data RKA</h3><button class="mc" onclick="closeModal('modalDelRka')">✕</button></div>
-    <div class="mb"><div class="alert alert-err" id="delRkaMsg"></div><p style="font-size:12.5px;">Apakah Anda yakin ingin menghapus data RKA ini? Tindakan ini tidak dapat dibatalkan.</p></div>
+    <div class="mh"><h3>🗑️ Hapus Data DPA</h3><button class="mc" onclick="closeModal('modalDelRka')">✕</button></div>
+    <div class="mb"><div class="alert alert-err" id="delRkaMsg"></div><p style="font-size:12.5px;">Apakah Anda yakin ingin menghapus data DPA ini? Tindakan ini tidak dapat dibatalkan.</p></div>
     <div class="mf"><button class="btn btn-ghost btn-sm" onclick="closeModal('modalDelRka')">Batal</button><button class="btn btn-red" id="delRkaConfirmBtn">🗑️ Ya, Hapus</button></div>
   </div>
 </div>
@@ -725,7 +725,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
         </div>
         <div id="mNoRkaWarn" style="display:none;" class="alert alert-warn"></div>
         <div class="fr2" style="margin-bottom:8px;">
-          <div class="fg" style="margin-bottom:0;"><label class="fl">Pegawai yang Mengajukan *</label><input type="text" class="fc" id="mPihak" placeholder="Contoh: Bambang Supriyono"></div>
+          <div class="fg" style="margin-bottom:0;"><label class="fl">Pegawai yang Mengajukan *</label><input type="text" class="fc" id="mPihak" placeholder="Contoh: Shelshi"></div>
           <div class="fg" style="margin-bottom:0;"><label class="fl">Dari Seksi *</label>
             <select class="fc" id="mSeksi">
               <option value="">— Pilih Seksi —</option>
@@ -763,7 +763,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
         <div id="mItemInfo" style="display:none;margin-bottom:10px;">
           <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:9px;overflow:hidden;">
             <div style="background:linear-gradient(90deg,#eff6ff,#f0fdf4);padding:8px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
-              <span style="font-size:11px;font-weight:700;color:var(--accent);">📊 Data dari RKA</span>
+              <span style="font-size:11px;font-weight:700;color:var(--accent);">📊 Data dari DPA</span>
               <div id="miStockPill" style="font-size:10px;font-weight:700;padding:2px 10px;border-radius:20px;"></div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-bottom:1px solid var(--border);">
@@ -785,12 +785,12 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
         </div>
         <!-- Harga Satuan otomatis dari RKA + badge -->
         <div class="fr4">
-          <div class="fg" style="margin-bottom:0;"><label class="fl">Volume *</label><input type="number" class="fc" id="mVol" placeholder="10" min="1" oninput="onVolInput()"></div>
-          <div class="fg" style="margin-bottom:0;"><label class="fl">Satuan</label><input type="text" class="fc" id="mSat" placeholder="Buah / Rim"></div>
+          <div class="fg" style="margin-bottom:0;"><label class="fl">Jumlah *</label><input type="number" class="fc" id="mVol" placeholder="10" min="1" oninput="onVolInput()"></div>
+          <div class="fg" style="margin-bottom:0;"><label class="fl">Satuan</label><input type="text" class="fc" id="mSat" placeholder="Pcs / Rim"></div>
           <div class="fg" style="margin-bottom:0;">
             <label class="fl" style="display:flex;align-items:center;gap:6px;">
               Harga Satuan *
-              <span id="mHargaAutoBadge" class="harga-auto-badge" style="display:none;">✨ Otomatis dari RKA</span>
+              <span id="mHargaAutoBadge" class="harga-auto-badge" style="display:none;">✨ Otomatis dari DPA</span>
             </label>
             <input type="number" class="fc" id="mHarga" placeholder="10000" min="0" oninput="onVolInput()">
           </div>
@@ -814,7 +814,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
 <div class="mov" id="modalExportWord">
   <div class="modal lg" style="display:flex;flex-direction:column;max-height:90vh;overflow:hidden;">
     <div class="mh" style="position:relative;top:unset;">
-      <h3>📄 Export Usulan Permintaan</h3>
+      <h3>📄 Download Usulan Permintaan</h3>
       <button class="mc" onclick="closeModal('modalExportWord')">✕</button>
     </div>
     <div class="mb" style="overflow-y:auto;flex:1;">
@@ -822,7 +822,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
 
       <!-- Kepada Yth — statis, tidak perlu diinput -->
       <div style="background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:9px;padding:11px 14px;margin-bottom:14px;">
-        <div style="font-size:10px;font-weight:700;color:#0369a1;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">📌 Kepada Yth. (sudah ditetapkan)</div>
+        <div style="font-size:10px;font-weight:700;color:#0369a1;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">📌 Kepada Yth.</div>
         <div style="font-size:13px;font-weight:800;color:#0f172a;">Mirza Arintha Praharasty, S.Sos.</div>
         <div style="font-size:11.5px;color:#475569;margin-top:3px;">NIP. 19901008 201903 2 014</div>
         <div style="font-size:11.5px;color:#475569;margin-top:2px;">Kepala Sub Bagian Tata Usaha</div>
@@ -866,7 +866,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
     <div class="mb" id="mIRBody"></div>
     <div class="mf">
       <button class="btn btn-ghost btn-sm" onclick="closeModal('modalImportResult')">Tutup</button>
-      <button class="btn btn-accent" onclick="closeModal('modalImportResult');goPage('rka')">📑 Lihat Data RKA</button>
+      <button class="btn btn-accent" onclick="closeModal('modalImportResult');goPage('rka')">📑 Lihat Data DPA</button>
     </div>
   </div>
 </div>
@@ -985,7 +985,7 @@ function renderImportPage(){
     <div class="sc sc-teal"><span class="ico">✅</span><div class="lbl">Bulan Belum Import</div><div class="val">${12-rkaBulans.filter(b=>b>0).length}</div><div class="sub">bulan kosong</div></div>`;
   document.getElementById('rkaStorageSub').textContent=rkaBulans.length+' bulan tersimpan · '+totalItems+' total item';
   const gridEl=document.getElementById('rkaMonthGrid');
-  if(!totalItems){gridEl.innerHTML='<div class="empty"><div class="ei">📭</div><p>Belum ada data RKA. Klik <b>"+ Import RKA Baru"</b> untuk memulai.</p></div>';return;}
+  if(!totalItems){gridEl.innerHTML='<div class="empty"><div class="ei">📭</div><p>Belum ada data DPA Klik <b>"+ Import DPA Baru"</b> untuk memulai.</p></div>';return;}
   let html='<div class="rka-month-grid">';
   for(let b=1;b<=12;b++){
     const items=(state.rka_per_bulan[b]||[]);const hasData=items.length>0;const subs=getRkaSubList(items);
@@ -1026,8 +1026,8 @@ function openImportWizard(bulanTarget){
   iwCurrentStep=1;iwSelectedBulan=bulanTarget;importWorkbook=null;importSheetData=[];importHeaders=[];colMapping={};
   document.getElementById('rkaFileInput').value='';document.getElementById('filePreviewInfo').style.display='none';
   ['iwStep1','iwStep2','iwStep3','iwStep4'].forEach((id,i)=>document.getElementById(id).style.display=i===0?'':'none');
-  if(bulanTarget!==null){document.getElementById('iwBulan').value=bulanTarget||4;document.getElementById('iwTitle').textContent='📤 Import RKA untuk Bulan '+BLN[bulanTarget||4];}
-  else{document.getElementById('iwBulan').value=getMonth();document.getElementById('iwTitle').textContent='📤 Import RKA Baru';}
+  if(bulanTarget!==null){document.getElementById('iwBulan').value=bulanTarget||4;document.getElementById('iwTitle').textContent='📤 Import DPA untuk Bulan '+BLN[bulanTarget||4];}
+  else{document.getElementById('iwBulan').value=getMonth();document.getElementById('iwTitle').textContent='📤 Import DPA Baru';}
   checkIwExisting();updateStepBar(1);
   document.getElementById('importWizard').style.display='';
   document.getElementById('importWizard').scrollIntoView({behavior:'smooth',block:'start'});
@@ -1035,7 +1035,7 @@ function openImportWizard(bulanTarget){
 function closeImportWizard(){document.getElementById('importWizard').style.display='none';}
 function checkIwExisting(){
   const b=parseInt(document.getElementById('iwBulan').value);const el=document.getElementById('iwExistingWarn');
-  if((state.rka_per_bulan[b]||[]).length>0){el.style.display='flex';el.innerHTML=`⚠️ <span>Bulan <b>${BLN[b]} 2026</b> sudah memiliki <b>${state.rka_per_bulan[b].length} item</b> RKA. Data lama akan <b>diganti</b>.</span>`;}
+  if((state.rka_per_bulan[b]||[]).length>0){el.style.display='flex';el.innerHTML=`⚠️ <span>Bulan <b>${BLN[b]} 2026</b> sudah memiliki <b>${state.rka_per_bulan[b].length} item</b> DPA. Data lama akan <b>diganti</b>.</span>`;}
   else{el.style.display='none';}
 }
 document.getElementById('iwBulan')&&document.getElementById('iwBulan').addEventListener('change',checkIwExisting);
@@ -1047,7 +1047,7 @@ function updateStepBar(step){
     else{dot.className='step-dot idle';dot.textContent=i;lbl.className='step-label';}
   }
 }
-function iwNext1(){iwSelectedBulan=parseInt(document.getElementById('iwBulan').value);document.getElementById('iwTitle').textContent='📤 Import RKA — '+BLN[iwSelectedBulan]+' 2026';iwShowStep(2);}
+function iwNext1(){iwSelectedBulan=parseInt(document.getElementById('iwBulan').value);document.getElementById('iwTitle').textContent='📤 Import DPA — '+BLN[iwSelectedBulan]+' 2026';iwShowStep(2);}
 function iwNext2(){if(!importSheetData.length){alert('Upload file terlebih dahulu.');return;}renderIwColMap();iwShowStep(3);}
 function iwNext3(){for(const fd of FIELD_DEFS.filter(f=>f.required)){if(colMapping[fd.key]===''||colMapping[fd.key]===undefined){alert(`Field "${fd.label}" wajib dipetakan.`);return;}}renderIwPreview();iwShowStep(4);}
 function iwBack(toStep){iwShowStep(toStep);}
@@ -1233,7 +1233,7 @@ function renderRkaTable(){
   const filterBulan=document.getElementById('rkaBulanFilter').value;const bulanNum=filterBulan==='all'?null:parseInt(filterBulan);
   let list=getRkaForBulan(bulanNum===null?'all':bulanNum);const hasRka=list.length>0;
   const noBanner=document.getElementById('rkaNoBanner');
-  if(!hasRka){noBanner.style.display='';noBanner.innerHTML=IS_ADMIN?`<div class="alert alert-err">🚫 <span>Belum ada data RKA. <b onclick="goPage('import-rka')" style="cursor:pointer;text-decoration:underline;">Import data RKA</b> terlebih dahulu.</span></div>`:`<div class="alert alert-err">🚫 <span>Belum ada data RKA. Hubungi Administrator.</span></div>`;}
+  if(!hasRka){noBanner.style.display='';noBanner.innerHTML=IS_ADMIN?`<div class="alert alert-err">🚫 <span>Belum ada data DPA. <b onclick="goPage('import-rka')" style="cursor:pointer;text-decoration:underline;">Import data DPA</b> terlebih dahulu.</span></div>`:`<div class="alert alert-err">🚫 <span>Belum ada data DPA. Hubungi Administrator.</span></div>`;}
   else{noBanner.style.display='none';}
   document.getElementById('rkaFilterInfo').textContent=bulanNum?BLN[bulanNum]+' 2026':'Semua Bulan';
   const q=(document.getElementById('filterRka')||{}).value||'';const sub=(document.getElementById('filterRkaSub')||{}).value||'';
@@ -1247,7 +1247,7 @@ function renderRkaTable(){
   document.getElementById('rkaCardSub').textContent=`TA 2026${bulanNum?' · '+BLN[bulanNum]:' · Semua Bulan'} · ${list.length} item`;
   // Harga satuan TIDAK ditampilkan di tabel Data RKA
   document.getElementById('rkaTbody').innerHTML=shown.length===0
-    ?`<tr><td colspan="8"><div class="empty"><div class="ei">📤</div><p>Belum ada data RKA.</p></div></td></tr>`
+    ?`<tr><td colspan="8"><div class="empty"><div class="ei">📤</div><p>Belum ada data DPA</p></div></td></tr>`
     :shown.map((r,i)=>{
       const sudah=getSudahUsul(r.item_key);const sisa=r.jumlah-sudah;const sisaColor=sisa<=0?'var(--red)':sisa<r.jumlah*0.2?'var(--orange)':'var(--green)';const blnLabel=r._bulan>0?BLN_S[r._bulan]:'—';
       return`<tr><td class="muted">${(rkaPage-1)*pp+i+1}</td><td><span class="tag-month">${blnLabel}</span></td><td><div style="font-size:11px;font-weight:700;color:var(--accent);">${r.nama_sub||'—'}</div></td><td><div style="font-weight:600;font-size:12px;">${r.uraian||'—'}</div></td><td class="mono" style="text-align:right;">${r.jumlah||0}</td><td class="muted">${r.satuan||'—'}</td><td class="mono" style="color:${sudah>0?'var(--orange)':'var(--muted2)'};text-align:right;">${sudah>0?sudah:'—'}</td><td class="mono" style="color:${sisaColor};font-weight:700;text-align:right;">${sisa}</td></tr>`;
@@ -1264,9 +1264,9 @@ function renderRkaTable(){
 function renderUsulanPage(){
   const bln=getMonth();const rka=getRkaForUsulan(bln);const hasRka=rka.length>0;const hasSpecificRka=hasBulanRka(bln);
   const noRkaEl=document.getElementById('usulanNoRka');
-  if(!hasRka){noRkaEl.style.display='';noRkaEl.innerHTML=IS_ADMIN?`<div class="alert alert-err">🚫 <span>Belum ada data RKA untuk bulan <b>${BLN[bln]}</b>. <b onclick="goPage('import-rka')" style="cursor:pointer;text-decoration:underline;">Import data RKA</b> terlebih dahulu.</span></div>`:`<div class="alert alert-err">🚫 <span>Belum ada data RKA untuk bulan <b>${BLN[bln]}</b>. Hubungi Administrator.</span></div>`;}
+  if(!hasRka){noRkaEl.style.display='';noRkaEl.innerHTML=IS_ADMIN?`<div class="alert alert-err">🚫 <span>Belum ada data DPA untuk bulan <b>${BLN[bln]}</b>. <b onclick="goPage('import-rka')" style="cursor:pointer;text-decoration:underline;">Import data DPA</b> terlebih dahulu.</span></div>`:`<div class="alert alert-err">🚫 <span>Belum ada data DPA untuk bulan <b>${BLN[bln]}</b>. Hubungi Administrator.</span></div>`;}
   else{noRkaEl.style.display='none';}
-  document.getElementById('usulanSubtitle').textContent='Input usulan — Bulan Aktif: '+BLN[bln]+' 2026'+(hasSpecificRka?' (RKA '+BLN[bln]+' tersedia)':' (menggunakan RKA gabungan)');
+  document.getElementById('usulanSubtitle').textContent='Input usulan — Bulan Aktif: '+BLN[bln]+' 2026'+(hasSpecificRka?' (DPA '+BLN[bln]+' tersedia)':' (menggunakan DPA gabungan)');
   document.getElementById('usulanBulanLabel').textContent=BLN[bln]+' 2026';
   const bP=getPengajuanBulan(bln);const bItems=bP.flatMap(p=>p.items||[]);const totalNilai=bItems.reduce((s,it)=>s+(it.total||0),0);
   document.getElementById('usulanStats').innerHTML=`
@@ -1279,7 +1279,7 @@ function renderUsulanPage(){
     <div class="ms-item">📋 Pengajuan: <b>${bP.length}</b></div>
     <div class="ms-item">📦 Item: <b>${bItems.length}</b></div>
     <div class="ms-item">💰 Total: <b>${totalNilai>0?formatRp(totalNilai):'—'}</b></div>
-    <div class="ms-item" style="font-size:10.5px;color:${hasSpecificRka?'var(--green)':'var(--orange)'};">${hasSpecificRka?'✅ RKA '+BLN[bln]+' tersedia':'⚠️ Menggunakan RKA gabungan'}</div>
+    <div class="ms-item" style="font-size:10.5px;color:${hasSpecificRka?'var(--green)':'var(--orange)'};">${hasSpecificRka?'✅ DPA '+BLN[bln]+' tersedia':'⚠️ Menggunakan DPA gabungan'}</div>
     <div class="ms-item" style="margin-left:auto;"><button class="btn btn-ghost btn-xs" onclick="goPage('subkegiatan')">🏛️ Cek Stok Sub Kegiatan</button></div>`;
   renderUsulanTable();
   const subs=getRkaSubList(rka);
@@ -1321,7 +1321,7 @@ function renderUsulanTable(){
 // ─────────────────────────────────────────
 function openModalUsulan(){
   const bln=getMonth();const rka=getRkaForUsulan(bln);
-  if(!rka.length){if(IS_ADMIN&&confirm('Belum ada data RKA. Pergi ke halaman Import RKA?')){goPage('import-rka');}else if(!IS_ADMIN)alert('Belum ada data RKA. Hubungi Administrator.');return;}
+  if(!rka.length){if(IS_ADMIN&&confirm('Belum ada data DPA. Pergi ke halaman Import DPA?')){goPage('import-rka');}else if(!IS_ADMIN)alert('Belum ada data RKA. Hubungi Administrator.');return;}
   modalItems=[];itemListExpanded=true;
   document.getElementById('mBulan').value=bln;
   ['mNomorSurat','mPihak','mNIP','mJabatan'].forEach(id=>document.getElementById(id).value='');
@@ -1336,7 +1336,7 @@ function openModalUsulan(){
 }
 function onMBulanChange(){
   const bln=parseInt(document.getElementById('mBulan').value)||getMonth();const rka=getRkaForUsulan(bln);const warnEl=document.getElementById('mNoRkaWarn');
-  if(!rka.length){warnEl.style.display='flex';warnEl.innerHTML=IS_ADMIN?`⚠️ <span>Belum ada RKA untuk bulan <b>${BLN[bln]}</b>. <b onclick="closeModal('modalUsulan');goPage('import-rka');" style="cursor:pointer;text-decoration:underline;">Import RKA dulu</b></span>`:`⚠️ <span>Belum ada RKA untuk bulan <b>${BLN[bln]}</b>. Hubungi Administrator.</span>`;}
+  if(!rka.length){warnEl.style.display='flex';warnEl.innerHTML=IS_ADMIN?`⚠️ <span>Belum ada DPA untuk bulan <b>${BLN[bln]}</b>. <b onclick="closeModal('modalUsulan');goPage('import-rka');" style="cursor:pointer;text-decoration:underline;">Import DPA dulu</b></span>`:`⚠️ <span>Belum ada DPA untuk bulan <b>${BLN[bln]}</b>. Hubungi Administrator.</span>`;}
   else{warnEl.style.display='none';}
   populateMSubKeg();
   document.getElementById('mItemSel').innerHTML='<option value="">— Pilih Sub dulu —</option>';
@@ -1682,7 +1682,7 @@ function selectRiwayatMonth(b){riwayatSelectedMonth=b;renderRiwayat();}
 function renderRiwayatDetail(bln){
   if(!bln){document.getElementById('riwayatContent').innerHTML='<div class="empty"><div class="ei">📅</div><p>Pilih bulan.</p></div>';return;}
   const bP=getPengajuanBulan(bln);const bItems=bP.flatMap(p=>p.items||[]);const grandTotal=bItems.reduce((s,it)=>s+(it.total||0),0);
-  document.getElementById('riwayatContent').innerHTML=`<div class="card"><div class="card-head"><h3>📅 Pengajuan Bulan ${BLN[bln]} 2026</h3><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;"><span class="badge b-info">${bP.length} pengajuan · ${bItems.length} item</span>${grandTotal>0?`<span class="badge b-green">💰 ${formatRp(grandTotal)}</span>`:''}<button class="btn btn-ghost btn-xs" onclick="exportBulanExcel(${bln})">⬇️ Export Excel</button></div></div>
+  document.getElementById('riwayatContent').innerHTML=`<div class="card"><div class="card-head"><h3>📅 Pengajuan Bulan ${BLN[bln]} 2026</h3><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;"><span class="badge b-info">${bP.length} pengajuan · ${bItems.length} item</span>${grandTotal>0?`<span class="badge b-green">💰 ${formatRp(grandTotal)}</span>`:''}<button class="btn btn-ghost btn-xs" onclick="exportBulanExcel(${bln})">⬇️ Rekapitulasi</button></div></div>
     <div class="filter-bar" style="margin-bottom:0;"><div class="sw"><span class="si">🔍</span><input type="text" class="si-inp" id="filterRiwayat" placeholder="Cari…" oninput="filterRiwayatTable(${bln})"></div><select class="sel" id="filterRiwayatSub" onchange="filterRiwayatTable(${bln})"><option value="">Semua Sub</option>${getRkaSubList(getRkaForBulan('all')).map(s=>`<option value="${s.kode}">${s.nama}</option>`).join('')}</select></div>
     <div class="tw" style="margin-top:8px;"><table><thead><tr><th style="width:36px;">No</th><th>Sub Kegiatan</th><th>Uraian Barang</th><th style="text-align:right;width:50px;">Jumlah</th><th style="width:55px;">Sat</th><th class="th-right" style="width:115px;">Harga Satuan</th><th class="th-right" style="width:115px;">Jumlah Harga</th><th>Keterangan</th><th style="width:130px;">Aksi</th></tr></thead><tbody id="riwayatTbody"></tbody></table></div>
     <div class="pagi"><span class="pagi-info" id="riwayatInfo">—</span></div></div>`;
@@ -1781,7 +1781,7 @@ async function exportRkaExcel(){
     styleDataRow(row,[7]); // kolom 7 = Harga Satuan
   });
 
-  await downloadXlsx(wb,'Data_RKA_SIPUA_2026.xlsx');
+  await downloadXlsx(wb,'Data_DPA_SIPUA_2026.xlsx');
 }
 
 
@@ -1877,7 +1877,7 @@ async function exportAllExcel(){
     }
   });
 
-  await downloadXlsx(wb,'Rekap_Semua_Bulan_SIPUA_2026.xlsx');
+  await downloadXlsx(wb,'Rekapitulasi_SIPUA_2026.xlsx');
 }
 
 
@@ -1921,7 +1921,7 @@ async function exportLaporan(){
     else if(sisa<r.jumlah*0.2) sisaCell.font={color:{argb:'FFF59E0B'},bold:true};
   });
 
-  await downloadXlsx(wb,'Laporan_Rekap_SIPUA_2026.xlsx');
+  await downloadXlsx(wb,'Laporan_Rekapitulasi_SIPUA_2026.xlsx');
 }
 // ─────────────────────────────────────────
 //  EDIT PENGAJUAN
@@ -2065,13 +2065,13 @@ function eAddItem() {
 
   const errEl = document.getElementById('eErrMsg');
   if (!itemKey) { errEl.innerHTML = '⚠️ Pilih nama barang.'; errEl.style.display = 'flex'; return; }
-  if (!vol || vol <= 0) { errEl.innerHTML = '⚠️ Isi volume.'; errEl.style.display = 'flex'; return; }
+  if (!vol || vol <= 0) { errEl.innerHTML = '⚠️ Isi jumlah.'; errEl.style.display = 'flex'; return; }
   errEl.style.display = 'none';
 
   const bln = parseInt(document.getElementById('eBulan').value) || getMonth();
   const rka = getRkaForUsulan(bln);
   const rkaItem = rka.find(r => r.item_key === itemKey);
-  if (!rkaItem) { errEl.innerHTML = '⚠️ Item RKA tidak ditemukan.'; errEl.style.display = 'flex'; return; }
+  if (!rkaItem) { errEl.innerHTML = '⚠️ Item DPA tidak ditemukan.'; errEl.style.display = 'flex'; return; }
 
   const sudahLain = (state.pengajuan || []).filter(p => p.id !== editPengajuanId)
     .flatMap(p => p.items || []).filter(it => it.item_key === itemKey)
@@ -2080,11 +2080,11 @@ function eAddItem() {
   const sisaEfektif = rkaItem.jumlah - sudahLain - sudahEdit;
 
   if (sisaEfektif <= 0) { errEl.innerHTML = '🚫 Stok item ini sudah habis.'; errEl.style.display = 'flex'; return; }
-  if (vol > sisaEfektif) { errEl.innerHTML = `⚠️ Volume melebihi sisa stok (${sisaEfektif} ${rkaItem.satuan || ''}).`; errEl.style.display = 'flex'; document.getElementById('eVol').value = sisaEfektif; eOnVolInput(); return; }
+  if (vol > sisaEfektif) { errEl.innerHTML = `⚠️ Jumlah melebihi sisa stok (${sisaEfektif} ${rkaItem.satuan || ''}).`; errEl.style.display = 'flex'; document.getElementById('eVol').value = sisaEfektif; eOnVolInput(); return; }
 
   editItems.push({
     id: uid(), kode_sub: rkaItem.kode_sub || rkaItem.nama_sub, nama_sub: rkaItem.nama_sub,
-    item_key: itemKey, uraian: rkaItem.uraian, volume: vol, satuan: sat, harga, total: vol * harga, keterangan: ket
+    item_key: itemKey, uraian: rkaItem.uraian, volume: juml, satuan: sat, harga, total: juml * harga, keterangan: ket
   });
   renderEditItems();
   ['eItemSel','eVol','eSat','eHarga','eTotal','eKet'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
