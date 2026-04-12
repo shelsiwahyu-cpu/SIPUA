@@ -980,7 +980,7 @@ function renderImportPage(){
   const totalItems=Object.values(state.rka_per_bulan||{}).reduce((s,a)=>s+(a||[]).length,0);
   document.getElementById('importRkaStats').innerHTML=`
     <div class="sc sc-blue"><span class="ico">📅</span><div class="lbl">Bulan Tersimpan</div><div class="val">${rkaBulans.length}</div><div class="sub">dari 12 bulan</div></div>
-    <div class="sc sc-green"><span class="ico">📋</span><div class="lbl">Total Item RKA</div><div class="val">${totalItems}</div><div class="sub">seluruh bulan</div></div>
+    <div class="sc sc-green"><span class="ico">📋</span><div class="lbl">Total Item DPA</div><div class="val">${totalItems}</div><div class="sub">seluruh bulan</div></div>
     <div class="sc sc-orange"><span class="ico">🏛️</span><div class="lbl">Sub Kegiatan</div><div class="val">${getRkaSubList(getRkaForBulan('all')).length}</div><div class="sub">unik (semua bulan)</div></div>
     <div class="sc sc-teal"><span class="ico">✅</span><div class="lbl">Bulan Belum Import</div><div class="val">${12-rkaBulans.filter(b=>b>0).length}</div><div class="sub">bulan kosong</div></div>`;
   document.getElementById('rkaStorageSub').textContent=rkaBulans.length+' bulan tersimpan · '+totalItems+' total item';
@@ -1106,7 +1106,7 @@ function mapRow(row){const obj={};FIELD_DEFS.forEach(fd=>{const idx=colMapping[f
 function renderIwPreview(){
   const mapped=importSheetData.slice(0,8).map(row=>mapRow(row));const total=importSheetData.length;
   document.getElementById('iwPreviewCount').textContent=total+' baris data';
-  document.getElementById('iwPreviewAlert').innerHTML=`<div class="alert alert-ok">✅ <span>Siap import <b>${total} baris</b> ke RKA bulan <b>${BLN[iwSelectedBulan]} 2026</b>.</span></div>`;
+  document.getElementById('iwPreviewAlert').innerHTML=`<div class="alert alert-ok">✅ <span>Siap import <b>${total} baris</b> ke DPA bulan <b>${BLN[iwSelectedBulan]} 2026</b>.</span></div>`;
   document.getElementById('iwPreviewTable').innerHTML=`<table><thead><tr>${FIELD_DEFS.map(fd=>`<th>${fd.label}</th>`).join('')}</tr></thead><tbody>${mapped.map(r=>`<tr>${FIELD_DEFS.map(fd=>`<td style="font-size:11px;">${r[fd.key]||'<span style="color:var(--muted2);">—</span>'}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
 }
 
@@ -1129,7 +1129,7 @@ function doSaveRkaBulan(){
   const subs=getRkaSubList(items);
   const hasHarga=items.some(r=>r.harga_satuan>0);
   document.getElementById('mIRBody').innerHTML=`
-    <div class="alert alert-ok" style="margin-bottom:14px;">✅ <b>${items.length} item RKA</b> berhasil disimpan untuk bulan <b>${BLN[b]} 2026</b>${prevCount>0?' (mengganti '+prevCount+' data lama)':''}.${hasHarga?' <b style="color:var(--green);">💰 Data harga satuan berhasil diimport.</b>':' <span style="color:var(--orange);">⚠️ Tidak ada data harga satuan.</span>'}</div>
+    <div class="alert alert-ok" style="margin-bottom:14px;">✅ <b>${items.length} item DPA</b> berhasil disimpan untuk bulan <b>${BLN[b]} 2026</b>${prevCount>0?' (mengganti '+prevCount+' data lama)':''}.${hasHarga?' <b style="color:var(--green);">💰 Data harga satuan berhasil diimport.</b>':' <span style="color:var(--orange);">⚠️ Tidak ada data harga satuan.</span>'}</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">${subs.map(s=>{const it=items.filter(r=>(r.kode_sub||r.nama_sub)===s.kode);return`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;"><div style="font-weight:700;font-size:12px;">${s.nama}</div><div style="font-size:11px;color:var(--muted);"><b style="color:var(--accent);">${it.length} item</b></div></div>`;}).join('')}</div>`;
   openModal('modalImportResult');renderImportPage();updateSubSelects();updateBadgeRka();
 }
@@ -1160,7 +1160,7 @@ function updateBadgeRka(){
 function renderSubKegiatanPage(){
   const rkaAll=getRkaForBulan('all');const subs=getRkaSubList(rkaAll);const hasRka=rkaAll.length>0;
   document.getElementById('skNoRka').style.display=hasRka?'none':'';
-  document.getElementById('skPageSub').textContent=hasRka?`Daftar ${subs.length} sub kegiatan · ${rkaAll.length} total item RKA`:'Belum ada data RKA';
+  document.getElementById('skPageSub').textContent=hasRka?`Daftar ${subs.length} sub kegiatan · ${rkaAll.length} total item DPA`:'Belum ada data DPA';
   document.getElementById('skSearch').value='';
   document.getElementById('skClearBtn').classList.remove('show');
   document.getElementById('skSearchResult').style.display='none';
@@ -1191,8 +1191,8 @@ function renderDashboard(){
   if(!hasRka){
     noRkaEl.style.display='';
     noRkaEl.innerHTML=IS_ADMIN
-      ?`<div class="alert alert-warn">⚠️ <span>Data RKA belum diimport. <b onclick="goPage('import-rka')" style="cursor:pointer;text-decoration:underline;">Klik di sini untuk Import RKA</b>.</span></div>`
-      :`<div class="alert alert-warn">⚠️ <span>Data RKA belum tersedia. Hubungi <b>Administrator</b>.</span></div>`;
+      ?`<div class="alert alert-warn">⚠️ <span>Data DPA belum diimport. <b onclick="goPage('import-rka')" style="cursor:pointer;text-decoration:underline;">Klik di sini untuk Import DPA</b>.</span></div>`
+      :`<div class="alert alert-warn">⚠️ <span>Data DPA belum tersedia. Hubungi <b>Administrator</b>.</span></div>`;
   } else {noRkaEl.style.display='none';}
   document.getElementById('dashSub').textContent='Ringkasan Usulan TA 2026 — Bulan Aktif: '+BLN[bln];
   document.getElementById('dashBulanNow').textContent=BLN[bln]+' 2026';
@@ -1202,7 +1202,7 @@ function renderDashboard(){
   const totalNilai=bItems.reduce((s,it)=>s+(it.total||0),0);
   const rkaAll=getRkaForBulan('all');
   document.getElementById('dashStats').innerHTML=`
-    <div class="sc sc-blue"><span class="ico">📦</span><div class="lbl">Total Item RKA</div><div class="val">${rkaAll.length}</div><div class="sub">${getRkaBulanList().length} bulan diimport</div></div>
+    <div class="sc sc-blue"><span class="ico">📦</span><div class="lbl">Total Item DPA</div><div class="val">${rkaAll.length}</div><div class="sub">${getRkaBulanList().length} bulan diimport</div></div>
     <div class="sc sc-orange"><span class="ico">📋</span><div class="lbl">Total Pengajuan TA</div><div class="val">${allP.length}</div><div class="sub">${allItems.length} item barang</div></div>
     <div class="sc sc-green"><span class="ico">✅</span><div class="lbl">Pengajuan Bulan Ini</div><div class="val">${bP.length}</div><div class="sub">${bItems.length} item · ${BLN_S[bln]}</div></div>
     <div class="sc sc-teal"><span class="ico">💰</span><div class="lbl">Nilai Bulan Ini</div><div class="val" style="font-size:11px;">${totalNilai>0?formatRp(totalNilai):'—'}</div><div class="sub">${BLN_S[bln]} 2026</div></div>`;
