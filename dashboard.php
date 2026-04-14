@@ -292,7 +292,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
   <?php endif; ?>
   <button class="nav-item" onclick="goPage('rka')"><span class="nav-icon">📑</span> Data DPA</button>
   <button class="nav-item" onclick="goPage('subkegiatan')"><span class="nav-icon">🏛️</span> Sub Kegiatan</button>
-  <button class="nav-item" onclick="goPage('usulan')"><span class="nav-icon">✅</span> Usulan Bulanan</button>
+  <button class="nav-item" onclick="goPage('usulan')"><span class="nav-icon">✅</span> Usulan Permintaan Barang</button>
   <button class="nav-item" onclick="goPage('riwayat')"><span class="nav-icon">🗂️</span> Riwayat per Bulan</button>
   <button class="nav-item" onclick="goPage('laporan')"><span class="nav-icon">📊</span> Laporan</button>
   <div class="sb-foot">
