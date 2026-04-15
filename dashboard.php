@@ -576,14 +576,45 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
 </div>
 
 <!-- ════ LAPORAN ════ -->
+<!-- ════ LAPORAN ════ -->
 <div class="page" id="page-laporan">
   <div class="ph">
-    <div><h2>Rekapitulasi Usulan Barang</h2><p>Rekap usulan seluruh bulan TA 2026</p></div>
+    <div>
+      <h2>Rekapitulasi Usulan Barang</h2>
+      <p id="laporanSubTitle">Rekap usulan seluruh bulan TA 2026</p>
+    </div>
     <div style="display:flex;gap:7px;">
       <button class="btn btn-orange" onclick="window.print()">🖨️ Cetak Laporan </button>
       <button class="btn btn-green btn-sm" onclick="exportLaporan()">⬇️ Rekapitulasi Usulan Barang</button>
     </div>
   </div>
+
+  <!-- ─── Filter Bulan ─── -->
+  <div class="card" style="margin-bottom:12px;">
+    <div class="card-head"><h3>📅 Filter Bulan Laporan</h3></div>
+    <div class="card-body" style="padding:10px 14px;">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <label style="font-size:12px;font-weight:600;">Tampilkan laporan bulan:</label>
+        <select class="sel" id="filterLaporanBulan" onchange="onFilterLaporanChange()">
+          <option value="all">Semua Bulan</option>
+          <option value="1">Januari 2026</option>
+          <option value="2">Februari 2026</option>
+          <option value="3">Maret 2026</option>
+          <option value="4">April 2026</option>
+          <option value="5">Mei 2026</option>
+          <option value="6">Juni 2026</option>
+          <option value="7">Juli 2026</option>
+          <option value="8">Agustus 2026</option>
+          <option value="9">September 2026</option>
+          <option value="10">Oktober 2026</option>
+          <option value="11">November 2026</option>
+          <option value="12">Desember 2026</option>
+        </select>
+        <span id="laporanFilterInfo" class="tag-month">—</span>
+      </div>
+    </div>
+  </div>
+
   <div class="sg sg3" id="lapStats"></div>
   <div class="card">
     <div class="card-head"><h3>📊 Grafik Pengajuan per Sub Kegiatan</h3></div>
@@ -592,13 +623,16 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
   <div class="card">
     <div class="card-head"><h3>📋 Rekap per Item DPA</h3></div>
     <div class="tw"><table>
-      <thead><tr><th>No</th><th>Bulan DPA</th><th>Sub Kegiatan</th><th>Uraian</th><th style="text-align:right;">Jumlah DPA</th><th>Satuan</th><th style="text-align:right;">Total Diusulkan</th><th style="text-align:right;">Sisa</th><th>%</th></tr></thead>
+      <thead><tr>
+        <th>No</th><th>Bulan DPA</th><th>Sub Kegiatan</th><th>Uraian</th>
+        <th style="text-align:right;">Jumlah DPA</th><th>Satuan</th>
+        <th style="text-align:right;">Total Diusulkan</th>
+        <th style="text-align:right;">Sisa</th><th>%</th>
+      </tr></thead>
       <tbody id="lapTbody"></tbody>
     </table></div>
   </div>
 </div>
-
-</div><!-- /content -->
 </main>
 
 <!-- ════ MODAL EDIT PENGAJUAN ════ -->
@@ -960,12 +994,24 @@ function goPage(name){
   if(name==='riwayat')renderRiwayat();
   if(name==='laporan')renderLaporan();
 }
-function onMonthChange(){
-  const pg=document.querySelector('.page.active');if(!pg)return;
-  const id=pg.id.replace('page-','');
-  if(id==='usulan')renderUsulanPage();
-  if(id==='dashboard')renderDashboard();
-  if(id==='subkegiatan')renderSubKegiatanPage();
+function onMonthChange() {
+  const pg = document.querySelector('.page.active');
+  if (!pg) return;
+  const id = pg.id.replace('page-', '');
+  if (id === 'usulan')     renderUsulanPage();
+  if (id === 'dashboard')  renderDashboard();
+  if (id === 'subkegiatan') renderSubKegiatanPage();
+  if (id === 'laporan') {
+    // Sync filter dropdown ke bulan aktif, lalu render ulang
+    const filterEl = document.getElementById('filterLaporanBulan');
+    if (filterEl) {
+      filterEl.value = String(getMonth());
+      filterEl.dataset.initialized = 'true';
+      const infoEl = document.getElementById('laporanFilterInfo');
+      if (infoEl) infoEl.textContent = BLN[getMonth()] + ' 2026';
+    }
+    renderLaporan();
+  }
 }
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
@@ -1707,16 +1753,142 @@ function delPengajuanRiwayat(id){state.pengajuan=(state.pengajuan||[]).filter(p=
 // ─────────────────────────────────────────
 //  LAPORAN
 // ─────────────────────────────────────────
-function renderLaporan(){
-  const allP=state.pengajuan||[];const allItems=allP.flatMap(p=>p.items||[]);const rkaAll=getRkaForBulan('all');
-  document.getElementById('lapStats').innerHTML=`<div class="sc sc-blue"><span class="ico">📋</span><div class="lbl">Total Pengajuan TA</div><div class="val">${allP.length}</div></div><div class="sc sc-green"><span class="ico">📦</span><div class="lbl">Total Item Barang</div><div class="val">${allItems.length}</div></div><div class="sc sc-teal"><span class="ico">💰</span><div class="lbl">Total Nilai</div><div class="val" style="font-size:12px;">${formatRp(allItems.reduce((s,it)=>s+(it.total||0),0))}</div></div>`;
-  const subs=getRkaSubList(rkaAll);const subCounts=subs.map(s=>allItems.filter(it=>(it.kode_sub||it.nama_sub)===s.kode).length);
-  const ctx=document.getElementById('lapBar');if(lapBarInst)lapBarInst.destroy();
-  lapBarInst=new Chart(ctx,{type:'bar',data:{labels:subs.map(s=>s.nama.split(' ').slice(0,2).join(' ')),datasets:[{data:subCounts,backgroundColor:['#2563eb','#059669','#f59e0b','#0d9488','#7c3aed','#db2777','#ea580c'],borderRadius:5}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{ticks:{stepSize:1}}}}});
-  const itemTotals={};allItems.forEach(it=>{if(!itemTotals[it.item_key])itemTotals[it.item_key]=0;itemTotals[it.item_key]+=it.volume||0;});
-  const rows=rkaAll.filter(r=>itemTotals[r.item_key]>0);
-  if(!rows.length){document.getElementById('lapTbody').innerHTML='<tr><td colspan="9"><div class="empty"><p>Belum ada pengajuan.</p></div></td></tr>';return;}
-  document.getElementById('lapTbody').innerHTML=rows.map((r,i)=>{const usul=itemTotals[r.item_key]||0;const sisa=r.jumlah-usul;const pct=r.jumlah>0?(usul/r.jumlah*100).toFixed(0):0;const blnLabel=r._bulan>0?BLN_S[r._bulan]:'—';return`<tr><td class="muted">${i+1}</td><td><span class="tag-month">${blnLabel}</span></td><td style="font-size:10.5px;">${(r.nama_sub||'').split(' ').slice(0,3).join(' ')}</td><td style="font-weight:600;">${r.uraian||'—'}</td><td class="mono" style="text-align:right;">${r.jumlah}</td><td class="muted">${r.satuan||'—'}</td><td class="mono" style="color:var(--orange);text-align:right;">${usul}</td><td class="mono" style="color:${sisa<=0?'var(--red)':'var(--muted)'};text-align:right;">${sisa}</td><td class="mono">${pct}%</td></tr>`;}).join('');
+function onFilterLaporanChange() {
+  const filterEl = document.getElementById('filterLaporanBulan');
+  const infoEl   = document.getElementById('laporanFilterInfo');
+  if (!filterEl) return;
+  const val = filterEl.value;
+  if (infoEl) infoEl.textContent = val === 'all' ? 'Semua Bulan' : BLN[parseInt(val)] + ' 2026';
+  filterEl.dataset.initialized = 'true';
+  renderLaporan();
+}
+
+function renderLaporan() {
+  const filterEl   = document.getElementById('filterLaporanBulan');
+  const infoEl     = document.getElementById('laporanFilterInfo');
+
+  // Jika elemen filter belum ada, skip
+  if (!filterEl) return;
+
+  // Sinkron dengan bulan aktif jika belum pernah diinisialisasi
+  if (filterEl.dataset.initialized !== 'true') {
+    filterEl.value = String(getMonth());
+    filterEl.dataset.initialized = 'true';
+  }
+
+  const activeBulan = filterEl.value;
+  if (infoEl) infoEl.textContent = activeBulan === 'all' ? 'Semua Bulan' : BLN[parseInt(activeBulan)] + ' 2026';
+
+  // ─── Filter pengajuan berdasarkan bulan ───
+  const allP = (state.pengajuan || []).filter(p =>
+    activeBulan === 'all' ? true : p.bulan == activeBulan
+  );
+  const allItems = allP.flatMap(p => p.items || []);
+
+  // ─── Update subtitle ───
+  const subTitleEl = document.getElementById('laporanSubTitle');
+  if (subTitleEl) {
+    subTitleEl.textContent = activeBulan === 'all'
+      ? 'Rekap usulan seluruh bulan TA 2026'
+      : 'Rekap usulan bulan ' + BLN[parseInt(activeBulan)] + ' 2026';
+  }
+
+  // ─── RKA: filter berdasarkan bulan ───
+  const rkaFiltered = activeBulan === 'all'
+    ? getRkaForBulan('all')
+    : (getRkaForBulan(parseInt(activeBulan)).length > 0
+        ? getRkaForBulan(parseInt(activeBulan))
+        : getRkaForBulan('all'));
+
+  const totalNilai = allItems.reduce((s, it) => s + (it.total || 0), 0);
+
+  // ─── Stat cards ───
+  document.getElementById('lapStats').innerHTML = `
+    <div class="sc sc-blue"><span class="ico">📋</span>
+      <div class="lbl">Total Pengajuan${activeBulan !== 'all' ? ' Bulan Ini' : ' TA'}</div>
+      <div class="val">${allP.length}</div>
+      <div class="sub">${activeBulan !== 'all' ? BLN[parseInt(activeBulan)] + ' 2026' : 'Semua bulan'}</div>
+    </div>
+    <div class="sc sc-green"><span class="ico">📦</span>
+      <div class="lbl">Total Item Barang</div>
+      <div class="val">${allItems.length}</div>
+      <div class="sub">${allP.length} pengajuan</div>
+    </div>
+    <div class="sc sc-teal"><span class="ico">💰</span>
+      <div class="lbl">Total Nilai</div>
+      <div class="val" style="font-size:12px;">${totalNilai > 0 ? formatRp(totalNilai) : '—'}</div>
+      <div class="sub">${activeBulan !== 'all' ? BLN[parseInt(activeBulan)] : 'Seluruh TA 2026'}</div>
+    </div>`;
+
+  // ─── Grafik ───
+  const subs      = getRkaSubList(rkaFiltered);
+  const subCounts = subs.map(s =>
+    allItems.filter(it => (it.kode_sub || it.nama_sub) === s.kode).length
+  );
+  const ctx = document.getElementById('lapBar');
+  if (lapBarInst) lapBarInst.destroy();
+  lapBarInst = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: subs.map(s => s.nama.split(' ').slice(0, 3).join(' ')),
+      datasets: [{
+        data: subCounts,
+        backgroundColor: ['#2563eb','#059669','#f59e0b','#0d9488','#7c3aed','#db2777','#ea580c'],
+        borderRadius: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: activeBulan !== 'all',
+          text: activeBulan !== 'all'
+            ? 'Bulan: ' + BLN[parseInt(activeBulan)] + ' 2026'
+            : '',
+          font: { size: 12 }, color: '#64748b'
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: { ticks: { stepSize: 1, font: { size: 10 } } }
+      }
+    }
+  });
+
+  // ─── Tabel rekap ───
+  const itemTotals = {};
+  allItems.forEach(it => {
+    if (!itemTotals[it.item_key]) itemTotals[it.item_key] = 0;
+    itemTotals[it.item_key] += it.volume || 0;
+  });
+
+  const rows = rkaFiltered.filter(r => itemTotals[r.item_key] > 0);
+  if (!rows.length) {
+    document.getElementById('lapTbody').innerHTML =
+      `<tr><td colspan="9"><div class="empty">
+        <p>Belum ada pengajuan${activeBulan !== 'all' ? ' untuk bulan ' + BLN[parseInt(activeBulan)] : ''}.</p>
+      </div></td></tr>`;
+    return;
+  }
+
+  document.getElementById('lapTbody').innerHTML = rows.map((r, i) => {
+    const usul = itemTotals[r.item_key] || 0;
+    const sisa = r.jumlah - usul;
+    const pct  = r.jumlah > 0 ? (usul / r.jumlah * 100).toFixed(0) : 0;
+    const blnLabel = r._bulan > 0 ? BLN_S[r._bulan] : '—';
+    return `<tr>
+      <td class="muted">${i + 1}</td>
+      <td><span class="tag-month">${blnLabel}</span></td>
+      <td style="font-size:10.5px;">${r.nama_sub || '—'}</td>
+      <td style="font-weight:600;">${r.uraian || '—'}</td>
+      <td class="mono" style="text-align:right;">${r.jumlah}</td>
+      <td class="muted">${r.satuan || '—'}</td>
+      <td class="mono" style="color:var(--orange);text-align:right;">${usul}</td>
+      <td class="mono" style="color:${sisa <= 0 ? 'var(--red)' : 'var(--muted)'};text-align:right;">${sisa}</td>
+      <td class="mono">${pct}%</td>
+    </tr>`;
+  }).join('');
 }
 
 // ─────────────────────────────────────────
@@ -1892,7 +2064,7 @@ async function exportLaporan(){
   const wb=new ExcelJS.Workbook();
   const ws=wb.addWorksheet('Laporan');
 
-  const headers=['No','Bulan RKA','Sub Kegiatan','Uraian','Jumlah RKA','Satuan','Total Diusulkan','Sisa','%'];
+  const headers=['No','Bulan DPA','Sub Kegiatan','Uraian','Jumlah DPA','Satuan','Total Diusulkan','Sisa','%'];
   const widths  =[6,   14,        40,             50,      12,          12,      16,               10,    10];
 
   ws.columns=headers.map((h,i)=>({header:h,key:String(i),width:widths[i]}));
