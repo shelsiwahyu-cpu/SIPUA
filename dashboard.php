@@ -293,8 +293,8 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
   <button class="nav-item" onclick="goPage('rka')"><span class="nav-icon">📑</span> Data DPA</button>
   <button class="nav-item" onclick="goPage('subkegiatan')"><span class="nav-icon">🏛️</span> Sub Kegiatan</button>
   <button class="nav-item" onclick="goPage('usulan')"><span class="nav-icon">✅</span> Usulan Permintaan Barang</button>
-  <button class="nav-item" onclick="goPage('riwayat')"><span class="nav-icon">🗂️</span> Rekapitulasi Bulanan</button>
-  <button class="nav-item" onclick="goPage('laporan')"><span class="nav-icon">📊</span> Rekapitulasi Usulan Barang</button>
+  <button class="nav-item" onclick="goPage('riwayat')"><span class="nav-icon">🗂️</span> Data Usulan Permintaan</button>
+  <button class="nav-item" onclick="goPage('laporan')"><span class="nav-icon">📊</span> Statistik Pengajuan </button>
   <div class="sb-foot">
     <a href="?logout=1" class="btn-logout" onclick="return confirm('Yakin ingin keluar?')">🚪 Keluar</a>
     <div class="sb-copy">SIPUA v1 © 2026 · TA 2026</div>
@@ -535,7 +535,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
 <div class="page" id="page-usulan">
   <div class="ph">
     <div><h2>Usulan Permintaan Barang</h2><p id="usulanSubtitle">Input usulan permintaan barang per bulan</p></div>
-    <button class="btn btn-accent" onclick="openModalUsulan()">+ Buat Pengajuan Baru</button>
+    <button class="btn btn-accent" onclick="openModalUsulan()">+ Usulan Permintaan</button>
   </div>
   <div id="usulanNoRka" style="display:none;"></div>
   <div class="month-strip" id="usulanMonthStrip"></div>
@@ -568,24 +568,24 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
 <!-- ════ RIWAYAT ════ -->
 <div class="page" id="page-riwayat">
   <div class="ph">
-    <div><h2>Rekapitulasi Bulanan</h2><p>Data pengajuan tersimpan per bulan</p></div>
-    <button class="btn btn-ghost btn-sm" onclick="exportAllExcel()">⬇️ Export All</button>
+    <div><h2>Data Usulan Permintaan</h2><p>Data pengajuan tersimpan per bulan</p></div>
+    <button class="btn btn-ghost btn-sm" onclick="exportAllExcel()">⬇️ Data Usulan Permintaan</button>
   </div>
   <div class="month-tabs" id="riwayatMonthTabs"></div>
   <div id="riwayatContent"><div class="empty"><div class="ei">📅</div><p>Pilih bulan untuk melihat riwayat.</p></div></div>
 </div>
 
-<!-- ════ LAPORAN ════ -->
+
 <!-- ════ LAPORAN ════ -->
 <div class="page" id="page-laporan">
   <div class="ph">
     <div>
-      <h2>Rekapitulasi Usulan Barang</h2>
-      <p id="laporanSubTitle">Rekap usulan seluruh bulan TA 2026</p>
+      <h2>Statistik Pengajuan</h2>
+      <p id="laporanSubTitle">Rekap usulan TA 2026</p>
     </div>
     <div style="display:flex;gap:7px;">
       <button class="btn btn-orange" onclick="window.print()">🖨️ Cetak Laporan </button>
-      <button class="btn btn-green btn-sm" onclick="exportLaporan()">⬇️ Rekapitulasi Usulan Barang</button>
+      <button class="btn btn-green btn-sm" onclick="exportLaporan()">⬇️ Rekapitulasi Data Pengajuan</button>
     </div>
   </div>
 
@@ -621,10 +621,10 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
     <div class="card-body"><canvas id="lapBar" height="180"></canvas></div>
   </div>
   <div class="card">
-    <div class="card-head"><h3>📋 Rekap per Item DPA</h3></div>
+    <div class="card-head"><h3>📋 Rekapitulasi usulan dan sesuai DPA</h3></div>
     <div class="tw"><table>
       <thead><tr>
-        <th>No</th><th>Bulan DPA</th><th>Sub Kegiatan</th><th>Uraian</th>
+        <th>No</th><th>Bulan</th><th>Sub Kegiatan</th><th>Uraian</th>
         <th style="text-align:right;">Jumlah DPA</th><th>Satuan</th>
         <th style="text-align:right;">Total Diusulkan</th>
         <th style="text-align:right;">Sisa</th><th>%</th>
@@ -699,7 +699,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
         </div>
         <div class="fr4">
           <div class="fg" style="margin-bottom:0;"><label class="fl">Volume *</label><input type="number" class="fc" id="eVol" placeholder="10" min="1" oninput="eOnVolInput()"></div>
-          <div class="fg" style="margin-bottom:0;"><label class="fl">Satuan</label><input type="text" class="fc" id="eSat" placeholder="Buah / Rim"></div>
+          <div class="fg" style="margin-bottom:0;"><label class="fl">Satuan</label><input type="text" class="fc" id="eSat" placeholder="Pcs"></div>
           <div class="fg" style="margin-bottom:0;">
             <label class="fl" style="display:flex;align-items:center;gap:6px;">
               Harga Satuan
@@ -738,7 +738,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
 <div class="mov" id="modalUsulan">
   <div class="modal">
     <div class="mh">
-      <h3 id="mUsulanTitle">➕ Buat Pengajuan Baru</h3>
+      <h3 id="mUsulanTitle">➕ Usulan Permintaan</h3>
       <button class="mc" onclick="closeModal('modalUsulan')">✕</button>
     </div>
     <div class="mb">
@@ -755,11 +755,11 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
               <option value="11">November 2026</option><option value="12">Desember 2026</option>
             </select>
           </div>
-          <div class="fg"><label class="fl">Nomor Surat *</label><input type="text" class="fc" id="mNomorSurat" placeholder="000.1.2.3/001/107.6/2026"></div>
+          <div class="fg"><label class="fl">Nomor Surat *</label><input type="text" class="fc" id="mNomorSurat" placeholder=""></div>
         </div>
         <div id="mNoRkaWarn" style="display:none;" class="alert alert-warn"></div>
         <div class="fr2" style="margin-bottom:8px;">
-          <div class="fg" style="margin-bottom:0;"><label class="fl">Pegawai yang Mengajukan *</label><input type="text" class="fc" id="mPihak" placeholder="Contoh: Shelshi"></div>
+          <div class="fg" style="margin-bottom:0;"><label class="fl">Pegawai yang Mengajukan *</label><input type="text" class="fc" id="mPihak" placeholder=""></div>
           <div class="fg" style="margin-bottom:0;"><label class="fl">Dari Seksi *</label>
             <select class="fc" id="mSeksi">
               <option value="">— Pilih Seksi —</option>
@@ -770,8 +770,8 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
           </div>
         </div>
         <div class="fr2">
-          <div class="fg" style="margin-bottom:0;"><label class="fl">NIP</label><input type="text" class="fc" id="mNIP" placeholder="199712312020011001"></div>
-          <div class="fg" style="margin-bottom:0;"><label class="fl">Jabatan</label><input type="text" class="fc" id="mJabatan" placeholder="Penata Laksana Barang"></div>
+          <div class="fg" style="margin-bottom:0;"><label class="fl">NIP</label><input type="text" class="fc" id="mNIP" placeholder=""></div>
+          <div class="fg" style="margin-bottom:0;"><label class="fl">Jabatan</label><input type="text" class="fc" id="mJabatan" placeholder=""></div>
         </div>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
@@ -820,7 +820,7 @@ $usernameJs = htmlspecialchars($username, ENT_QUOTES);
         <!-- Harga Satuan otomatis dari RKA + badge -->
         <div class="fr4">
           <div class="fg" style="margin-bottom:0;"><label class="fl">Jumlah *</label><input type="number" class="fc" id="mVol" placeholder="10" min="1" oninput="onVolInput()"></div>
-          <div class="fg" style="margin-bottom:0;"><label class="fl">Satuan</label><input type="text" class="fc" id="mSat" placeholder="Pcs / Rim"></div>
+          <div class="fg" style="margin-bottom:0;"><label class="fl">Satuan</label><input type="text" class="fc" id="mSat" placeholder="Pcs"></div>
           <div class="fg" style="margin-bottom:0;">
             <label class="fl" style="display:flex;align-items:center;gap:6px;">
               Harga Satuan *
@@ -976,7 +976,7 @@ function hasBulanRka(bulan){return(state.rka_per_bulan[bulan]||[]).length>0;}
 // ─────────────────────────────────────────
 //  NAVIGATION
 // ─────────────────────────────────────────
-const PAGE_NAMES={dashboard:'Dashboard','import-rka':'Import DPA',rka:'Data DPA',subkegiatan:'Sub Kegiatan',usulan:'Usulan Permintaan Barang',riwayat:'Rekapitulasi Bulanan',laporan:'Rekapitulasi Usulan Barang'};
+const PAGE_NAMES={dashboard:'Dashboard','import-rka':'Import DPA',rka:'Data DPA',subkegiatan:'Sub Kegiatan',usulan:'Usulan Permintaan Barang',riwayat:'Data Usulan Permintaan',laporan:'Statistik Pengajuan'};
 
 function goPage(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -1749,7 +1749,7 @@ function selectRiwayatMonth(b){riwayatSelectedMonth=b;renderRiwayat();}
 function renderRiwayatDetail(bln){
   if(!bln){document.getElementById('riwayatContent').innerHTML='<div class="empty"><div class="ei">📅</div><p>Pilih bulan.</p></div>';return;}
   const bP=getPengajuanBulan(bln);const bItems=bP.flatMap(p=>p.items||[]);const grandTotal=bItems.reduce((s,it)=>s+(it.total||0),0);
-  document.getElementById('riwayatContent').innerHTML=`<div class="card"><div class="card-head"><h3>📅 Pengajuan Bulan ${BLN[bln]} 2026</h3><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;"><span class="badge b-info">${bP.length} pengajuan · ${bItems.length} item</span>${grandTotal>0?`<span class="badge b-green">💰 ${formatRp(grandTotal)}</span>`:''}<button class="btn btn-ghost btn-xs" onclick="exportBulanExcel(${bln})">⬇️ Rekapitulasi</button></div></div>
+  document.getElementById('riwayatContent').innerHTML=`<div class="card"><div class="card-head"><h3>📅 Pengajuan Bulan ${BLN[bln]} 2026</h3><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;"><span class="badge b-info">${bP.length} pengajuan · ${bItems.length} item</span>${grandTotal>0?`<span class="badge b-green">💰 ${formatRp(grandTotal)}</span>`:''}<button class="btn btn-ghost btn-xs" onclick="exportBulanExcel(${bln})">⬇️ Usulan Bulanan</button></div></div>
     <div class="filter-bar" style="margin-bottom:0;"><div class="sw"><span class="si">🔍</span><input type="text" class="si-inp" id="filterRiwayat" placeholder="Cari…" oninput="filterRiwayatTable(${bln})"></div><select class="sel" id="filterRiwayatSub" onchange="filterRiwayatTable(${bln})"><option value="">Semua Sub</option>${getRkaSubList(getRkaForBulan('all')).map(s=>`<option value="${s.kode}">${s.nama}</option>`).join('')}</select></div>
     <div class="tw" style="margin-top:8px;"><table><thead><tr><th style="width:36px;">No</th><th>Sub Kegiatan</th><th>Uraian Barang</th><th style="text-align:right;width:50px;">Jumlah</th><th style="width:55px;">Sat</th><th class="th-right" style="width:115px;">Harga Satuan</th><th class="th-right" style="width:115px;">Jumlah Harga</th><th>Keterangan</th><th style="width:130px;">Aksi</th></tr></thead><tbody id="riwayatTbody"></tbody></table></div>
     <div class="pagi"><span class="pagi-info" id="riwayatInfo">—</span></div></div>`;
@@ -1841,7 +1841,6 @@ function renderLaporan() {
       <div class="sub">${activeBulan !== 'all' ? BLN[parseInt(activeBulan)] : 'Seluruh TA 2026'}</div>
     </div>`;
 
-  // ─── Grafik ───
 // ─── Grafik ───
 const subs      = getRkaSubList(rkaFiltered);
 const subCounts = subs.map(s =>
@@ -2103,7 +2102,7 @@ async function exportAllExcel(){
     }
   });
 
-  await downloadXlsx(wb,'Rekapitulasi_SIPUA_2026.xlsx');
+  await downloadXlsx(wb,'Data Usulan Permintaan_2026.xlsx');
 }
 
 
@@ -2118,7 +2117,7 @@ async function exportLaporan(){
   const wb=new ExcelJS.Workbook();
   const ws=wb.addWorksheet('Laporan');
 
-  const headers=['No','Bulan DPA','Sub Kegiatan','Uraian','Jumlah DPA','Satuan','Total Diusulkan','Sisa','%'];
+  const headers=['No','Bulan','Sub Kegiatan','Uraian','Jumlah DPA','Satuan','Total Diusulkan','Sisa','%'];
   const widths  =[6,   14,        40,             50,      12,          12,      16,               10,    10];
 
   ws.columns=headers.map((h,i)=>({header:h,key:String(i),width:widths[i]}));
@@ -2147,7 +2146,9 @@ async function exportLaporan(){
     else if(sisa<r.jumlah*0.2) sisaCell.font={color:{argb:'FFF59E0B'},bold:true};
   });
 
-  await downloadXlsx(wb,'Laporan_Rekapitulasi_SIPUA_2026.xlsx');
+const filterBulanVal = document.getElementById('filterLaporanBulan')?.value || 'all';
+const fileSuffix = filterBulanVal === 'all' ? 'Semua_Bulan' : BLN[parseInt(filterBulanVal)] + '_2026';
+await downloadXlsx(wb, `Data Usulan Permintaan_${fileSuffix}.xlsx`);
 }
 // ─────────────────────────────────────────
 //  EDIT PENGAJUAN
@@ -2312,7 +2313,7 @@ function eAddItem() {
     id: uid(), kode_sub: rkaItem.kode_sub || rkaItem.nama_sub, nama_sub: rkaItem.nama_sub,
     item_key: itemKey, uraian: rkaItem.uraian, volume: vol, satuan: sat, harga, total: vol * harga, keterangan: ket
   });
-  
+
   renderEditItems();
   ['eItemSel','eVol','eSat','eHarga','eTotal','eKet'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   document.getElementById('eHargaAutoBadge').style.display = 'none';
