@@ -995,6 +995,8 @@ function goPage(name){
   if(name==='laporan')renderLaporan();
 }
 function onMonthChange() {
+  // Selalu update sub kegiatan sesuai bulan baru
+  updateSubSelects();
   const pg = document.querySelector('.page.active');
   if (!pg) return;
   const id = pg.id.replace('page-', '');
@@ -1184,9 +1186,22 @@ function doSaveRkaBulan(){
 //  SUB SELECTS
 // ─────────────────────────────────────────
 function updateSubSelects(){
-  const allSubs=getRkaSubList(getRkaForBulan('all'));
-  const opts=allSubs.map(s=>`<option value="${s.kode}">${s.nama}</option>`).join('');
-  ['filterRkaSub','filterUsulanSub','wFilterSub'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<option value="">Semua Sub Kegiatan</option>'+opts;});
+  // filterRkaSub: tampilkan SEMUA sub (untuk halaman Data DPA)
+  const allSubsRka=getRkaSubList(getRkaForBulan('all'));
+  const optsRka=allSubsRka.map(s=>`<option value="${s.kode}">${s.nama}</option>`).join('');
+  const elRka=document.getElementById('filterRkaSub');
+  if(elRka)elRka.innerHTML='<option value="">Semua Sub Kegiatan</option>'+optsRka;
+
+  // filterUsulanSub: tampilkan sub sesuai bulan aktif
+  const bln=getMonth();
+  const rkaAktif=getRkaForUsulan(bln);
+  const subsAktif=getRkaSubList(rkaAktif.length>0?rkaAktif:getRkaForBulan('all'));
+  const optsAktif=subsAktif.map(s=>`<option value="${s.kode}">${s.nama}</option>`).join('');
+  ['filterUsulanSub','wFilterSub'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.innerHTML='<option value="">Semua Sub Kegiatan</option>'+optsAktif;
+  });
+
   populateMSubKeg();
 }
 function populateMSubKeg(){
@@ -1204,9 +1219,13 @@ function updateBadgeRka(){
 //  SUB KEGIATAN PAGE
 // ─────────────────────────────────────────
 function renderSubKegiatanPage(){
-  const rkaAll=getRkaForBulan('all');const subs=getRkaSubList(rkaAll);const hasRka=rkaAll.length>0;
+  const bln=getMonth();
+  const rkaAll=getRkaForUsulan(bln);
+  const rkaAllFallback=rkaAll.length>0?rkaAll:getRkaForBulan('all');
+  const subs=getRkaSubList(rkaAllFallback);const hasRka=rkaAllFallback.length>0;
+  const bulanLabel=rkaAll.length>0?` — ${BLN[bln]} 2026`:' (semua bulan)';
   document.getElementById('skNoRka').style.display=hasRka?'none':'';
-  document.getElementById('skPageSub').textContent=hasRka?`Daftar ${subs.length} sub kegiatan · ${rkaAll.length} total item DPA`:'Belum ada data DPA';
+  document.getElementById('skPageSub').textContent=hasRka?`Daftar ${subs.length} sub kegiatan · ${rkaAllFallback.length} total item DPA${bulanLabel}`:'Belum ada data DPA';
   document.getElementById('skSearch').value='';
   document.getElementById('skClearBtn').classList.remove('show');
   document.getElementById('skSearchResult').style.display='none';
@@ -1220,7 +1239,9 @@ function onSkSearch(){
   const clearBtn=document.getElementById('skClearBtn');const resultWrap=document.getElementById('skSearchResult');
   if(!q){clearBtn.classList.remove('show');resultWrap.style.display='none';return;}
   clearBtn.classList.add('show');resultWrap.style.display='';
-  const ql=q.toLowerCase();const rkaAll=getRkaForBulan('all');
+  const bln=getMonth();
+  const rkaBase=getRkaForUsulan(bln);
+  const ql=q.toLowerCase();const rkaAll=rkaBase.length>0?rkaBase:getRkaForBulan('all');
   const matched=rkaAll.filter(r=>(r.uraian||'').toLowerCase().includes(ql));
   if(!matched.length){resultWrap.innerHTML=`<div class="sk-result-wrap"><div class="sk-result-header"><span class="skrh-title">🔍 Hasil: "<b>${esc(q)}</b>"</span><span class="badge b-orange">0 hasil</span></div><div class="empty" style="padding:24px;"><div class="ei">🔎</div><p>Tidak ada barang yang cocok.</p></div></div>`;return;}
   const rows=matched.map((r,i)=>`<div class="sk-result-item"><span class="sri-no">${i+1}</span><span class="sri-name">${highlightMatch(r.uraian||'—',q)}</span><span class="sri-sub">🏛️ ${esc(r.nama_sub||'—')}</span></div>`).join('');
@@ -1716,7 +1737,7 @@ body{font-family:'Times New Roman',Times,serif;font-size:11pt;color:#000;line-he
 }
 
 // ─────────────────────────────────────────
-//  RIWAYAT
+//  REKAPITULASI RIWAYAT PENGAJUAN 
 // ─────────────────────────────────────────
 function renderRiwayat(){
   const bulanAda=[...new Set((state.pengajuan||[]).map(p=>p.bulan))].sort((a,b)=>a-b);const tabsEl=document.getElementById('riwayatMonthTabs');
@@ -1821,40 +1842,73 @@ function renderLaporan() {
     </div>`;
 
   // ─── Grafik ───
-  const subs      = getRkaSubList(rkaFiltered);
-  const subCounts = subs.map(s =>
-    allItems.filter(it => (it.kode_sub || it.nama_sub) === s.kode).length
-  );
-  const ctx = document.getElementById('lapBar');
-  if (lapBarInst) lapBarInst.destroy();
-  lapBarInst = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: subs.map(s => s.nama.split(' ').slice(0, 3).join(' ')),
-      datasets: [{
-        data: subCounts,
-        backgroundColor: ['#2563eb','#059669','#f59e0b','#0d9488','#7c3aed','#db2777','#ea580c'],
-        borderRadius: 5
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-        title: {
-          display: activeBulan !== 'all',
-          text: activeBulan !== 'all'
-            ? 'Bulan: ' + BLN[parseInt(activeBulan)] + ' 2026'
-            : '',
-          font: { size: 12 }, color: '#64748b'
+// ─── Grafik ───
+const subs      = getRkaSubList(rkaFiltered);
+const subCounts = subs.map(s =>
+  allItems.filter(it => (it.kode_sub || it.nama_sub) === s.kode).length
+);
+const ctx = document.getElementById('lapBar');
+if (lapBarInst) lapBarInst.destroy();
+
+// ─── Fungsi potong label pintar ───
+function shortenLabel(nama) {
+  // Hapus kata-kata umum di depan
+  let s = nama
+    .replace(/^Belanja\s+/i, '')
+    .replace(/^Alat\/Bahan untuk Kegiatan\s*/i, '')
+    .replace(/^Alat\/Bahan untuk\s*/i, '')
+    .replace(/^Bahan-Isi\s*/i, '')
+    .replace(/^Bahan\s+/i, '')
+    .trim();
+  // Potong jika masih panjang
+  return s.length > 22 ? s.slice(0, 20) + '…' : s;
+}
+
+lapBarInst = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: subs.map(s => shortenLabel(s.nama)),
+    datasets: [{
+      data: subCounts,
+      backgroundColor: ['#2563eb','#059669','#f59e0b','#0d9488','#7c3aed','#db2777','#ea580c'],
+      borderRadius: 5
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          // Tooltip tetap tampilkan nama lengkap
+          title: (items) => subs[items[0].dataIndex]?.nama || ''
         }
       },
-      scales: {
-        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
-        y: { ticks: { stepSize: 1, font: { size: 10 } } }
+      title: {
+        display: activeBulan !== 'all',
+        text: activeBulan !== 'all'
+          ? 'Bulan: ' + BLN[parseInt(activeBulan)] + ' 2026'
+          : '',
+        font: { size: 12 }, color: '#64748b'
       }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: {
+          font: { size: 10 },
+          maxRotation: 30,
+          minRotation: 15,
+          autoSkip: false
+        }
+      },
+      y: { ticks: { stepSize: 1, font: { size: 10 } } }
+    },
+    layout: {
+      padding: { bottom: 10 }
     }
-  });
+  }
+});
 
   // ─── Tabel rekap ───
   const itemTotals = {};
@@ -2254,10 +2308,11 @@ function eAddItem() {
   if (sisaEfektif <= 0) { errEl.innerHTML = '🚫 Stok item ini sudah habis.'; errEl.style.display = 'flex'; return; }
   if (vol > sisaEfektif) { errEl.innerHTML = `⚠️ Jumlah melebihi sisa stok (${sisaEfektif} ${rkaItem.satuan || ''}).`; errEl.style.display = 'flex'; document.getElementById('eVol').value = sisaEfektif; eOnVolInput(); return; }
 
-  editItems.push({
+ editItems.push({
     id: uid(), kode_sub: rkaItem.kode_sub || rkaItem.nama_sub, nama_sub: rkaItem.nama_sub,
-    item_key: itemKey, uraian: rkaItem.uraian, volume: juml, satuan: sat, harga, total: juml * harga, keterangan: ket
+    item_key: itemKey, uraian: rkaItem.uraian, volume: vol, satuan: sat, harga, total: vol * harga, keterangan: ket
   });
+  
   renderEditItems();
   ['eItemSel','eVol','eSat','eHarga','eTotal','eKet'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   document.getElementById('eHargaAutoBadge').style.display = 'none';
